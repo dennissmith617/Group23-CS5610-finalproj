@@ -7,9 +7,21 @@ const NavigationSidebar = () => {
     const paths = pathname.split('/')
     const active = paths[2];
     return (
-        <div>
-            "Hello World!"
-        </div>
+        <div className="list-group">
+                    <Link to="/readit/readit" className={`list-group-item ${active === 'readit'?'active':''}`}>
+                        Readit
+                    </Link>
+                    <Link to="/readit/home" className={`list-group-item ${active === 'home'?'active':''}`}>
+                        Home
+                    </Link>
+                     <Link to="/readit/profile" className={`list-group-item
+                                        ${active === 'profile'?'active':''}`}>
+                                    Profile
+                     </Link>
+                      <Link to="/readit/search" className={`list-group-item ${active === 'search'?'active':''}`}>
+                                     Search
+                      </Link>
+                </div>
     );
 };
 export default NavigationSidebar;
