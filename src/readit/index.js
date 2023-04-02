@@ -8,8 +8,11 @@ import EditProfileComponent from "./edit-profile";
 import SearchComponent from "./search";
 import LoginScreen from "./login";
 import RegisterScreen from "./register";
+import {useSelector} from "react-redux";
 
 function Readit() {
+    const { currentUser } = useSelector((state) => state.users);
+
     return (
         <div>
             <div className="row mt-2">
@@ -24,7 +27,7 @@ function Readit() {
                         <Route path="edit-profile" element={<EditProfileComponent/>}/>
                         <Route path="search" element={<SearchComponent/>}/>
                         <Route path="login" element={<LoginScreen/>}/>
-                        <Route path="/register" element={<RegisterScreen />} />
+                        <Route path="register" element={<RegisterScreen />} />
                     </Routes>
                 </div>
                 <div className="d-sm-none d-md-none d-lg-block col-lg-4 col-xl-4">

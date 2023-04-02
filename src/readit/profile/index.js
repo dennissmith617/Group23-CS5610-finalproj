@@ -23,11 +23,12 @@ function ProfileComponent() {
         <>
             <div className="position-relative">
                 <div className="row">
-                    <i className="col col-2 bi bi-arrow-left fs-4 fw-bold mt-2"></i>
-                    <div className="col "><span className="fs-4 fw-bold">Hello!</span>
-                        <div className="text-secondary">100 Books Read</div>
+                    <i className="col col-2 bi bi-book fs-4 fw-bold mt-2"></i>
+                    <div className="col "><span className="fs-4 fw-bold">Hello {currentUser.firstName}!</span>
+                        <div className="text-secondary">{currentUser.booksRead} Books Read</div>
                     </div>
                 </div>
+                <img src={`/images/books.jpeg`} width="100%" height={150}  alt="book_banner"/>
                 <div className="row">
                     <div className="col ">
                         <br/>
@@ -40,13 +41,10 @@ function ProfileComponent() {
                 </div>
             </div>
             <div>
-                <div className="fs-4 fw-bold">{currentUser.username} fix add </div>
+                <div className="fs-4 fw-bold">{currentUser.firstName} {currentUser.lastName}</div>
                 <div className="text-secondary">{currentUser.username}</div>
-                <div>add data</div>
                 <div className="text-secondary mt-3">
-                    <i className="bi bi-geo-alt"></i><span>Fake Location</span>
-                    <i className="bi bi-balloon ps-2"></i><span>Born Fake Date</span>
-                    <i className="bi bi-calendar3 ps-2"></i><span>Joined  Fake data</span>
+                    <i className="bi bi-balloon ps-2"></i><span>{currentUser.age} Years Old</span>
                 </div>
                 <div className="mt-3">
                     <span className="fw-bold">100</span> <span className="text-secondary">Following</span>
