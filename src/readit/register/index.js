@@ -17,7 +17,7 @@ function RegisterScreen() {
     const navigate = useNavigate();
     const register = () => {
         try {
-            dispatch(registerThunk({ username, password }));
+            dispatch(registerThunk({ username, password, firstName, lastName, email, age, role}));
             navigate("/readit/profile");
         } catch (err) {
             console.log(err);

@@ -14,6 +14,11 @@ function ProfileComponent() {
         dispatch(profileThunk());
     }, []);
 
+    if (!currentUser) {
+        return (<div>Sorry you are not logged in! Create an account to view this page.</div>);
+    }
+
+
     return (
         <>
             <div className="position-relative">
