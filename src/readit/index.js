@@ -6,7 +6,8 @@ import WhoToFollowList from "./who-to-follow-list";
 import ProfileComponent from "./profile";
 import EditProfileComponent from "./edit-profile";
 import SearchComponent from "./search";
-import LoginComponent from "./login";
+import LoginScreen from "./login";
+import RegisterScreen from "./register";
 
 function Readit() {
     return (
@@ -22,7 +23,8 @@ function Readit() {
                         <Route path="profile" element={<ProfileComponent/>}/>
                         <Route path="edit-profile" element={<EditProfileComponent/>}/>
                         <Route path="search" element={<SearchComponent/>}/>
-                        <Route path="login" element={<LoginComponent/>}/>
+                        <Route path="login" element={<LoginScreen/>}/>
+                        <Route path="/register" element={<RegisterScreen />} />
                     </Routes>
                 </div>
                 <div className="d-sm-none d-md-none d-lg-block col-lg-4 col-xl-4">

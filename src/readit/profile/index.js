@@ -1,16 +1,25 @@
-import React from "react";
+import React, {useEffect} from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {Link} from "react-router-dom";
+import {useNavigate} from "react-router";
+import {profileThunk} from "../../services/users/users-thunks";
 
-const ProfileComponent = (
+function ProfileComponent() {
 
-) => {
+    const { currentUser } = useSelector((state) => state.users);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    console.log(currentUser);
+    useEffect(() => {
+        dispatch(profileThunk());
+    }, []);
 
     return (
         <>
             <div className="position-relative">
                 <div className="row">
                     <i className="col col-2 bi bi-arrow-left fs-4 fw-bold mt-2"></i>
-                    <div className="col "><span className="fs-4 fw-bold">Dennis Smith</span>
+                    <div className="col "><span className="fs-4 fw-bold">Hello!</span>
                         <div className="text-secondary">100 Books Read</div>
                     </div>
                 </div>
@@ -26,8 +35,8 @@ const ProfileComponent = (
                 </div>
             </div>
             <div>
-                <div className="fs-4 fw-bold">Dennis Smith</div>
-                <div className="text-secondary">@fakedata</div>
+                <div className="fs-4 fw-bold">{currentUser.username} fix add </div>
+                <div className="text-secondary">{currentUser.username}</div>
                 <div>add data</div>
                 <div className="text-secondary mt-3">
                     <i className="bi bi-geo-alt"></i><span>Fake Location</span>
@@ -39,8 +48,7 @@ const ProfileComponent = (
                     <span className="fw-bold ps-2">100</span> <span className="text-secondary">Followers</span>
                 </div>
             </div>
-        </>
-    );
+        </>);
 }
 
 export default ProfileComponent;

@@ -21,6 +21,12 @@ const NavigationSidebar = () => {
                       <Link to="/readit/search" className={`list-group-item ${active === 'search'?'active':''}`}>
                                      Search
                       </Link>
+                        <Link to="/readit/login" className={`list-group-item ${active === 'login'?'active':''}`}>
+                            Login
+                        </Link>
+                    <Link to="/readit/register" className={`list-group-item ${active === 'register'?'active':''}`}>
+                        Register
+                    </Link>
                 </div>
     );
 };
