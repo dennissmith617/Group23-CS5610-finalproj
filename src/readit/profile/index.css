@@ -1,0 +1,17 @@
+.wd-fg-color-lightgray {
+    color: rgb(110,118,125);
+}
+.wd-small-font {
+    font-size: 14px;
+}
+.wd-large-font {
+    font-size: 18px;
+}
+.wd-profile-img {
+    height: 80px;
+    width: 80px;
+    position: relative;
+    top: 10px;
+    /* left: 30px; */
+    /* bottom: 205px; */
+}
