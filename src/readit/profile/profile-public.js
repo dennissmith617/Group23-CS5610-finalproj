@@ -55,7 +55,7 @@ const ProfilePublicComponent = (
                 <div className="col-10">
                     <b className="fs-3">{profile.firstName} {profile.lastName}</b>
                     <div className="fs-6"><b>{profile.role}</b></div>
-                    <div className="wd-small-font wd-fg-color-lightgray">{profile.booksRead} Books Read {`${(profile.role === "CRITIC" || profile.role === "AUTHOR") ? `| ${profile.comments.length} Comments Posted` : ''}`} {`${(profile.role === "AUTHOR") ? `| ${profile.numBooksWritten} Books Written` : ''}`} </div>
+                    <div className="wd-small-font wd-fg-color-lightgray">{profile.booksRead} Books Read {`${(profile.role === "CRITIC" || profile.role === "AUTHOR") ? `| ${profile.comments.length} Reviews Posted` : ''}`} {`${(profile.role === "AUTHOR") ? `| ${profile.numBooksWritten} Books Written` : ''}`} </div>
                 </div>
             </div>
             <img src={`/images/books.jpeg`} width="100%" height={150} className="mt-2" />
@@ -97,12 +97,12 @@ const ProfilePublicComponent = (
                     </ol>
                 </div>
             </div>
-            <div className="ms-3 mt-4" hidden={`${(profile.role === "VIEWER") ? 'hidden' : ''}`}>
+            {/* <div className="ms-3 mt-4" hidden={`${(profile.role === "VIEWER") ? 'hidden' : ''}`}>
                 <h5>Comments Posted:</h5>
                 <ul>
                     {profile.comments.map(c => <li>"{c}"</li>)}
                 </ul>
-            </div>
+            </div> */}
         </div>
     );
 };

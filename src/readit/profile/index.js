@@ -11,9 +11,7 @@ const ProfileComponent = (
     "profilePicture": "../../images/defaultProPic.jpeg",
     "followers": [1, 2, 3], "following": [1, 2, 3, 4, 5], "comments": ["c1", "c2"], "booksRead": 6789, "numBooksWritten": 45
     }}
-) => {
-    // const state = useSelector((state) => state.users);
-    
+) => {  
     let state = useSelector((state) => state.users);
     const dispatch = useDispatch();
     let {currentUser} = useSelector((state) => state.users);
@@ -40,7 +38,7 @@ const ProfileComponent = (
                 <div className="col-10">
                     <b className="fs-3">Hi {currentUser.firstName}!</b>
                     <div className="fs-6"><b>{currentUser.role}</b></div>
-                    <div className="wd-small-font wd-fg-color-lightgray">{currentUser.booksRead} Books Read {`${(currentUser.role === "CRITIC" || currentUser.role === "AUTHOR") ? `| ${currentUser.comments.length} Comments Posted` : ''}`} {`${(currentUser.role === "AUTHOR") ? `| ${currentUser.numBooksWritten} Books Written` : ''}`} </div>
+                    <div className="wd-small-font wd-fg-color-lightgray">{currentUser.booksRead} Books Read {`${(currentUser.role === "CRITIC" || currentUser.role === "AUTHOR") ? `| ${currentUser.comments.length} Reviews Posted` : ''}`} {`${(currentUser.role === "AUTHOR") ? `| ${currentUser.numBooksWritten} Books Written` : ''}`} </div>
                 </div>
             </div>
             <img src={`/images/books.jpeg`} width="100%" height={150} className="mt-2" />
@@ -58,23 +56,16 @@ const ProfileComponent = (
                 <div className="wd-small-font wd-fg-color-lightgray">@{currentUser.username}</div>
 
                 <div className="wd-fg-color-lightgray mt-2">
-                    {/**add logic to show only when user = logged in */}
                     <span className="pe-3">
                         <i className="bi bi-envelope"> </i>
                         {currentUser.email}
                     </span>
-                    {/**add logic to show only when user = logged in */}
                     <span className="pe-3">
                         <i className="bi bi-balloon"> </i>
                         {currentUser.age} years old
                     </span>
                 </div>
             </div>
-
-                {/* <div className="mt-2">
-                    <b>{profile.following.length}</b> <span className="wd-fg-color-lightgray pe-3"> Following</span>
-                    <b>{profile.followers.length}</b> <span className="wd-fg-color-lightgray pe-3"> Followers</span>
-                </div> */}
             <div className="row ms-3 mt-2">
                 <div className="col-6 mt-4">
                     <h5>Following ({currentUser.following.length})</h5>
@@ -110,12 +101,12 @@ const ProfileComponent = (
                     </ol>
                 </div>
             </div>
-            <div className="ms-3 mt-4" hidden={`${(currentUser.role === "VIEWER") ? 'hidden' : ''}`}>
-                <h5>Comments Posted:</h5>
+            {/*<div className="ms-3 mt-4" hidden={`${(currentUser.role === "VIEWER") ? 'hidden' : ''}`}>
+                <h5>Reviews Posted:</h5>
                 <ul>
                     {currentUser.comments.map(c => <li>"{c}"</li>)}
                 </ul>
-            </div>
+            </div> */}
         </div>
     );
 };
