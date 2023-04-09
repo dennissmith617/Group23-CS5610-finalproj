@@ -2,6 +2,7 @@ import React,  {useState}  from "react";
 import { useSelector } from "react-redux";
 import TellYourStory from "./tell-your-story";
 import PostsList from "../posts/posts-list";
+import AnonymousHomePage from "./anonymous-homepage-view";
 
 function HomeComponent() {
 
@@ -9,11 +10,10 @@ function HomeComponent() {
     console.log(currentUser);
 
     if (currentUser == null) {
-        return <div/>
-        // render custom stand home street
+        return <AnonymousHomePage/>
     }
 
-    if (currentUser.role == "USER"){
+    if (currentUser.role === "USER"){
         return(
                 <div>
                     <h4>Home</h4>

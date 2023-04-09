@@ -29,9 +29,7 @@ function Readit() {
                         <Route path="search" element={<SearchComponent/>}/>
                         <Route path="login" element={<LoginScreen/>}/>
                         <Route path="logout" element={<LogoutScreen/>}/>
-                        {currentUser &&
-                        <Route path="register" element={<RegisterScreen />} />
-                        }
+                        <Route path="register" element={<RegisterScreen />}/>
                     </Routes>
                 </div>
                 <div className="d-sm-none d-md-none d-lg-block col-lg-4 col-xl-4">

@@ -8,7 +8,6 @@ function ProfileComponent() {
 
     const { currentUser } = useSelector((state) => state.users);
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     console.log(currentUser);
     useEffect(() => {
         dispatch(profileThunk());
