@@ -3,7 +3,6 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import "./index.css";
 import { findUserByIdThunk, updateUserThunk } from "../../services/users/users-thunks.js";
 import { useDispatch, useSelector } from "react-redux";
-import mongoose from 'mongoose';
 
 const ProfilePublicComponent = (
 ) => {
@@ -21,24 +20,28 @@ const ProfilePublicComponent = (
     useEffect(() => {
         dispatch(findUserByIdThunk(vid));
     }, []);
-    const profile = currentUser;
     const {lid} = useParams();
-    const [following, setFollowing] = useState((state.users.find((u) => u._id === lid)).following.includes(vid));
+    const lidUser = state.users.find((u) => u._id === lid);
+    let [following, setFollowing] = useState(lidUser.following.includes(vid));
+    if (lidUser.following.includes(vid) !== following) {
+        setFollowing(lidUser.following.includes(vid));
+    }
+    
     const followHandler = () => {
-        let newFollowingList = Array.from((state.users.find((u) => u._id === lid)).following);
-        let newFollowersList = Array.from((state.users.find((u) => u._id === vid)).followers);
+        let newFollowingList = Array.from(lidUser.following);
+        let newFollowersList = Array.from(lidUser.followers);
         if (following) {
-            newFollowingList = newFollowingList.filter((u) => u._id !== vid);
-            newFollowersList = newFollowersList.filter((u) => u._id !== lid);
+            newFollowingList.pop(vid);
+            newFollowersList.pop(lid);
         } else {
-            newFollowingList.push(new mongoose.Types.ObjectId(lid));
-            newFollowersList.push(new mongoose.Types.ObjectId(vid));
+            newFollowingList.push(vid);
+            newFollowersList.push(lid);
         }
+        
         const newLidUser = {...(state.users.find((u) => u._id === lid)), following: newFollowingList};
         const newVidUser = {...(state.users.find((u) => u._id === vid)), followers: newFollowersList};
-        console.log(users);
-        // dispatch(updateUserThunk(newLidUser));
-        // dispatch(updateUserThunk(newVidUser));
+        dispatch(updateUserThunk(newLidUser));
+        dispatch(updateUserThunk(newVidUser));
         setFollowing(!following);
     }
     const navigate = useNavigate();
@@ -53,23 +56,23 @@ const ProfilePublicComponent = (
                     <i className="fs-4 bi bi-book"></i>
                 </div>
                 <div className="col-10">
-                    <b className="fs-3">{profile.firstName} {profile.lastName}</b>
-                    <div className="fs-6"><b>{profile.role}</b></div>
-                    <div className="wd-small-font wd-fg-color-lightgray">{profile.booksRead} Books Read {`${(profile.role === "CRITIC" || profile.role === "AUTHOR") ? `| ${profile.comments.length} Reviews Posted` : ''}`} {`${(profile.role === "AUTHOR") ? `| ${profile.numBooksWritten} Books Written` : ''}`} </div>
+                    <b className="fs-3">{currentUser.firstName} {currentUser.lastName}</b>
+                    <div className="fs-6"><b>{currentUser.role}</b></div>
+                    <div className="wd-small-font wd-fg-color-lightgray">{currentUser.booksRead} Books Read {`${(currentUser.role === "CRITIC" || currentUser.role === "AUTHOR") ? `| ${currentUser.comments.length} Reviews Posted` : ''}`} {`${(currentUser.role === "AUTHOR") ? `| ${currentUser.numBooksWritten} Books Written` : ''}`} </div>
                 </div>
             </div>
             <img src={`/images/books.jpeg`} width="100%" height={150} className="mt-2" />
             <div className="row mt-5">
                 <div className="col-8">
-                    <img src={profile.profilePicture} className="ms-4 wd-profile-img rounded-circle"/>
+                    <img src={currentUser.profilePicture} className="ms-4 wd-profile-img rounded-circle"/>
                 </div>
                 <span className="col-3 mt-2 ms-3">
                     <button onClick={followHandler} className={`rounded-pill btn ${(following) ? "btn-dark" : "btn-outline-dark"} float-end fw-bold`}>{(following) ? "Following" : "Follow"}</button>
                 </span>
             </div>
             <div className="ms-4 mt-3">
-                <b className="fs-5">{profile.firstName} {profile.lastName}</b>
-                <div className="wd-small-font wd-fg-color-lightgray">@{profile.username}</div>
+                <b className="fs-5">{currentUser.firstName} {currentUser.lastName}</b>
+                <div className="wd-small-font wd-fg-color-lightgray">@{currentUser.username}</div>
             </div>
             <div className="row ms-3 mt-2">
                 <div className="col-6 mt-4">
