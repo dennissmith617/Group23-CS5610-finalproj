@@ -1,25 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { BrowserRouter } from "react-router-dom";
+import { Route, Routes } from "react-router";
+import store from "./redux/store";
+import { Provider } from "react-redux";
+import Readit from "./readit";
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <Provider store={store}>
+            <div className="container-fluid">
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<Readit />} />
+                        <Route path="/readit/*" element={<Readit/>}/>
+                    </Routes>
+                </BrowserRouter>
+            </div>
+        </Provider>
+    );
 }
 
 export default App;
