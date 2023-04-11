@@ -14,22 +14,21 @@ const ProfilePublicComponent = (
     } catch(error) {
         console.log(error);
     }
+    console.log(state);
     const {users} = useSelector((state) => state.users);
+    const {lid} = useParams();
+    const lidUser = state.users.find((u) => u._id === lid);
+    let [following, setFollowing] = useState(lidUser.following.includes(vid));
     const dispatch = useDispatch();
     console.log(currentUser);
     useEffect(() => {
         dispatch(findUserByIdThunk(vid));
-    }, []);
-    const {lid} = useParams();
-    const lidUser = state.users.find((u) => u._id === lid);
-    let [following, setFollowing] = useState(lidUser.following.includes(vid));
-    if (lidUser.following.includes(vid) !== following) {
-        setFollowing(lidUser.following.includes(vid));
-    }
+        setFollowing(lidUser.following.includes(vid))
+    }, [vid]);
     
     const followHandler = () => {
         let newFollowingList = Array.from(lidUser.following);
-        let newFollowersList = Array.from(lidUser.followers);
+        let newFollowersList = Array.from(currentUser.followers);
         if (following) {
             newFollowingList.pop(vid);
             newFollowersList.pop(lid);
