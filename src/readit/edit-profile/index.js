@@ -3,7 +3,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
 import { profileThunk, updateUserThunk } from '../../services/users/users-thunks';
 
-
 const EditProfileComponent = (
     {profile1 = { "_id": 1, "role": "CRITIC", "username": "dummy", "email": "test@test.com",
     "firstName": "Dummy", "lastName": "User", "age": 30,
