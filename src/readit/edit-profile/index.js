@@ -14,7 +14,7 @@ const EditProfileComponent = () => {
         <>
             <div className="position-relative">
                 <div className="row  mb-2">
-                    <a className="col col-2 mt-2" href="/tuiter/profile"><i className="bi bi-x-lg fs-4 fw-bold"></i></a>
+                    <a className="col col-2 mt-2" href="/readit/profile"><i className="bi bi-x-lg fs-4 fw-bold"></i></a>
                     <div className="col col-8 mt-2"><span className="fs-4 fw-bold">Edit Profile</span></div>
                     <button className="col col-2 btn btn-dark float-end fw-bold rounded-pill"
                             onClick={() => console.log("clicked")}>

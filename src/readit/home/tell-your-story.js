@@ -16,7 +16,7 @@ const TellYourStory = () => {
 
         <div className="row">
             <div className="col-auto">
-                <img src="../../images/GRRM_profile.jpeg" width={60}/>
+                <img src="/images/GRRM_profile.jpeg" width={60}/>
             </div>
             <div className="col-10">
        <textarea value={tellYourStory} placeholder="Tell Your Story"
