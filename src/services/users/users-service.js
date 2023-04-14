@@ -9,7 +9,8 @@ export const findAllUsers = async () => {
 };
 
 export const findUserById = async (id) => {
-    return await axios.get(`${USERS_API_URL}/${id}`);
+    const response =  await axios.get(`${USERS_API_URL}/${id}`);
+    return response.data;
 };
 
 export const createUser = (user) => {

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import uuid from "uuid";
 
 function AnonymousPublicProfile() {
-    const { username } = useParams();
+    const { uid } = useParams();
     const [profile, setProfile] = useState({});
     const [users, setUsers] = useState([]);
     const dispatch = useDispatch();
@@ -20,22 +20,21 @@ function AnonymousPublicProfile() {
         setUsers(action.payload);
     };
 
-    const getUserByUsername = async () => {
-        const user = await userService.findUserByUsername(username);
+    const getUserById = async () => {
+        const user = await userService.findUserById(uid);
         setProfile(user);
     };
 
     useEffect(() => {
-        if (username) {
+        if (uid) {
             getAllUsers().then(r => console.log("all users loaded"));
-            getUserByUsername().then(r => console.log("loaded"));
+            getUserById().then(r => console.log("user loaded"));
         } else {
             getProfile();
         }
     }, []);
 
     if (profile) {
-
         return (
             <div>
                 <div className="row">
@@ -68,7 +67,7 @@ function AnonymousPublicProfile() {
                                 {profile.following.map(f => {
                                         const curr = users.find((u) => u._id === f);
                                         return (
-                                            <li><Link reloadDocument to={`/readit/profile/${curr.username}`}>{curr.firstName} {curr.lastName}</Link>
+                                            <li><Link reloadDocument to={`/readit/profile/${curr._id}`}>{curr.firstName} {curr.lastName}</Link>
                                             </li>
                                         )
                                     }
@@ -85,7 +84,7 @@ function AnonymousPublicProfile() {
                             {profile.followers.map(f => {
                                     const curr = users.find((u) => u._id === f);
                                     return (
-                                        <li><Link reloadDocument to={`/readit/profile/${curr.username}`}>{curr.firstName} {curr.lastName}</Link>
+                                        <li><Link reloadDocument to={`/readit/profile/${curr._id}`}>{curr.firstName} {curr.lastName}</Link>
                                         </li>
                                     )
                                 }

@@ -28,7 +28,7 @@ function Readit() {
                     <Routes>
                         <Route path="home" element={<HomeComponent/>}/>
                         <Route path="profile/:lid/:vid" element={<ProfilePublicComponent/>}/>
-                        <Route path="/profile/:username" element={<AnonymousPublicProfile />} />
+                        <Route path="/profile/:uid" element={<AnonymousPublicProfile />} />
                         <Route path="profile" element={<ProfileComponent/>}/>
                         <Route path="edit-profile" element={<EditProfileComponent/>}/>
                         <Route path="search" element={<SearchComponent/>}/>
