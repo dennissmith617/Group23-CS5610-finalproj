@@ -1,21 +1,21 @@
-import Readit from "./readit";
-import {BrowserRouter} from "react-router-dom";
-import {Routes, Route} from "react-router";
+import { BrowserRouter } from "react-router-dom";
+import { Route, Routes } from "react-router";
+import store from "./redux/store";
 import { Provider } from "react-redux";
-import store from './redux/store';
-
+import Readit from "./readit";
 function App() {
-  return (
-    <Provider store = {store}>
-    <BrowserRouter>
-      <div className="container">
-        <Routes>
-            <Route index element={<Readit/>}/>
-            <Route path="/readit/*" element={<Readit/>}/>
-        </Routes>
-      </div>
-    </BrowserRouter>
-    </Provider>
-  );
+    return (
+        <Provider store={store}>
+            <div className="container-fluid">
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<Readit />} />
+                        <Route path="/readit/*" element={<Readit/>}/>
+                    </Routes>
+                </BrowserRouter>
+            </div>
+        </Provider>
+    );
 }
+
 export default App;
