@@ -1,23 +1,40 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {useNavigate} from "react-router";
-import {profileThunk} from "../../services/users/users-thunks";
+import {logoutThunk, profileThunk} from "../../services/users/users-thunks";
+import * as userService from "../../services/users/users-service";
 
 function ProfileComponent() {
-
+    const { username } = useParams();
     const { currentUser } = useSelector((state) => state.users);
+    const [profile, setProfile] = useState({});
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     console.log(currentUser);
+    const getProfile = async () => {
+        const action = await dispatch(profileThunk());
+        setProfile(action.payload);
+    };
+    const getUserByUsername = async () => {
+        const user = await userService.findUserByUsername(username);
+        setProfile(user);
+    };
+
+    const logout = async () => {
+        await dispatch(logoutThunk());
+        navigate("/readit/login");
+    };
+
     useEffect(() => {
-        dispatch(profileThunk());
+        if (username) {
+            getUserByUsername();
+        } else {
+            getProfile();
+        }
     }, []);
 
-    if (!currentUser) {
-        return (<div>Sorry you are not logged in! Create an account to view this page.</div>);
-    }
-
-
+    console.log(currentUser);
     return (
         <>
             <div className="position-relative">
