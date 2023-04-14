@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {Link} from "react-router-dom";
 import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
-import { findAllUsersThunk, profileThunk } from "../../services/users/users-thunks";
+import {findAllUsersThunk, profileThunk} from "../../services/users/users-thunks";
 import { useNavigate } from "react-router-dom";
 
 const ProfileComponent = (
@@ -14,21 +14,38 @@ const ProfileComponent = (
 ) => {
     let state = useSelector((state) => state.users);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     let {currentUser} = useSelector((state) => state.users);
+
     try {
         currentUser = state.users.find((u) => u._id === state.currentUser._id);
     } catch(error) {
         console.log(error);
     }
+
     useEffect(() => {
         dispatch(findAllUsersThunk());
         dispatch(profileThunk());
     }, []);
+
+    const register = () => {
+        try {
+            navigate("/readit/register");
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     const {users} = useSelector((state) => state.users);
 
     if (!currentUser) {
-        return (<div>Sorry you are not logged in! Create an account to view this page.</div>);
+        return (
+            <button onClick={register} className="btn btn-primary">
+                Sign up for an Account Here!
+            </button>
+        );
     }
+
     return(
         <div>
             <div className="row">
