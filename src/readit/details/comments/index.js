@@ -1,0 +1,359 @@
+import {useParams} from "react-router";
+import { useEffect, useState } from "react";
+import DOMPurify from "dompurify"
+import axios from "axios";
+import { useSelector } from "react-redux";
+import {
+    getBookTitle,
+    getBookImage,
+    getAuthorNames,
+    getBookDescription,
+    getBookReleaseDate,
+    getBook,
+    getBookPreview,
+    getGoogleRating,
+    getPageCount,
+    getISBN
+} from "../service/details-service";
+import {getCommentsByBookId} from "./comments-service";
+import CommentItem from "../comments/commentItem.js";
+
+function Details() {
+    const { currentUser } = useSelector((state) => state.users);
+    let bookImageLoading = false;
+    const {username,id} = useParams()
+    const [book, setBook] =useState();
+    const [bookName, setBookName] =useState();
+    const [googleRating, setGoogleRating] =useState(0);
+    const [bookImage, setBookImage] =useState();
+    const [bookReleaseDate, setBookReleaseDate] =useState();
+    const [bookAuthors, setBookAuthors] =useState([]);
+    const [bookDescription, setBookDescription] =useState();
+    const [bookPreview, setBookPreview] =useState();
+    const [pageCount, setPageCount] = useState();
+    const [commentsArray, setCommentsArray] = useState([]);
+    const [rating, setRating] = useState(1);
+    const [ISBN, setISBN] = useState();
+    const [comment, setComment] =useState("");
+
+    const commentsClickHandler = async () => {
+        const newComment = {
+            comment : comment,
+            username: username,
+            rating: rating,
+            google_id :id,
+            bookTitle: bookName
+        }
+        const {data}  = await axios.post('http://localhost:4000/api/comments',{comment:newComment})
+        console.log(data)
+        await fetchCommentsByBookId(id)
+        setComment("")
+
+    };
+
+    const fetchCommentsByBookId= async (id) => {
+        const response = await getCommentsByBookId(id);
+        console.log(response);
+        setCommentsArray(response.reverse());
+    }
+
+    const fetchBookName = async () =>{
+        const response =await getBookTitle(id);
+        setBookName(response)
+    };
+    const fetchGoogleRating = async () =>{
+        const response =await getGoogleRating(id);
+        const ratingInt = parseFloat(response);
+        setGoogleRating(ratingInt)
+    };
+    const fetchBookPreview = async () =>{
+        const response =await getBookPreview(id);
+        setBookPreview(response)
+    };
+    const fetchBook = async () =>{
+        const response =await getBook(id);
+        setBook(response)
+    };
+    const fetchBookImage = async () =>{
+        const response =await getBookImage(id);
+        bookImageLoading = true;
+        setBookImage(response)
+    };
+    const fetchBookAuthors = async () => {
+        const response = await getAuthorNames(id);
+        setBookAuthors(response)
+    }
+        const fetchBookDescription= async () => {
+            const response = await getBookDescription(id);
+            const sanitizedHtml = DOMPurify.sanitize(response);
+            setBookDescription(sanitizedHtml)
+    }
+    const fetchBookReleaseDate= async () => {
+        const response = await getBookReleaseDate(id);
+        setBookReleaseDate(response)
+    }
+    const fetchPageCount= async () => {
+        const response = await getPageCount(id);
+        setPageCount(response)
+    }
+    const fetchISBN= async () => {
+        const response = await getISBN(id);
+        setISBN(response[1].identifier)
+    }
+    useEffect(() =>{
+        fetchBookName();
+        fetchBookImage()
+        fetchBookAuthors()
+        fetchBookDescription()
+        fetchBookReleaseDate()
+        fetchBook()
+        fetchBookPreview()
+        fetchGoogleRating()
+        fetchPageCount()
+        fetchISBN()
+        // fetchCommentsByBookId(id)
+    },[]);
+    useEffect(() =>{
+
+        fetchCommentsByBookId(id)
+    },[]);
+
+
+    return (
+        <>
+        <div>
+            <div className="row" >
+                <div className="col-3  float-left">
+                    <div className="card sticky-top" style={{top:"20px"}} >
+
+                        {bookImage? <img className="card-img-top w-100" src={bookImage} alt="Card image cap"/>:
+                            <div className="text-center">< div className="spinner-border  " role="status">
+                            <span className="sr-only"></span>
+                            </div>
+                            </div>}
+                            <div className="card-body">
+                                <h5 className="card-title"> </h5>
+                                <h6 className="text-sm-center text-decoration-underline">Authored By:</h6>
+                                <p className="card-text">{bookAuthors.map((author) => (
+                                    <h6 className="text-sm-center">{author}</h6>))} </p>
+                                <hr/>
+                                <div>
+                                    {}
+                                    <h6 className="text-sm-center">{bookReleaseDate}</h6>
+                                </div>
+                                {googleRating<1 &&
+                                <div className="text-sm-center">
+                                    <i className="text-warning bi bi-star"></i>
+                                    <i className="text-warning bi bi-star"></i>
+                                    <i className=" text-warning bi bi-star"></i>
+                                    <i className="text-warning bi bi-star"></i>
+                                    <i className="text-warning bi bi-star"></i>
+                                    <span className="fw-semibold"><br/><i className="bi bi-google"></i> Rating: ({googleRating})</span>
+                                </div>}
+                                {googleRating<2 && googleRating>=1&&
+                                    <div className="text-sm-center">
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                        <i className=" text-warning bi bi-star"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                        <span className="fw-semibold"><br/><i className="bi bi-google"></i> Rating: ({googleRating})</span>
+                                    </div>}
+                                {googleRating<3 && googleRating>=2&&
+                                    <div className="text-sm-center">
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className=" text-warning bi bi-star"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                        <span className="fw-semibold"><br/><i className="bi bi-google"></i> Rating: ({googleRating})</span>
+                                    </div>}
+                                {googleRating<4 && googleRating>=3&&
+                                    <div className="text-sm-center">
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className=" text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                         <span className="fw-semibold"><br/><i className="bi bi-google"></i> Rating: ({googleRating})</span>
+                                    </div>}
+                                {googleRating<5 && googleRating>=4&&
+                                    <div className="text-sm-center">
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className=" text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                    </div>}
+                                {googleRating===5 &&
+                                    <div className="text-sm-center">
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className=" text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <span className="fw-semibold"><br/><i className="bi bi-google"></i> Rating: ({googleRating})</span>
+                                    </div>}
+                                <div className="text-sm-center">
+
+                                    {bookPreview?<a target="_blank" href={bookPreview}><button className="btn btn-primary">Google Books</button></a>:
+                                        <button className="btn btn-primary" type="button" disabled>
+                                            <span className="spinner-border spinner-border-sm" role="status"
+                                                  aria-hidden="true"></span>
+                                            Loading...
+                                        </button>}
+                                </div>
+
+                            </div>
+                    </div>
+                </div>
+                <div className="col-9">
+                    <div className="col-12 text-lg-center">
+
+                        <h1 className="font-weight-bold fw-semibold " style={{fontFamily:"Courier New"}}> {bookName} </h1>
+                        <hr/>
+                    </div>
+                    <div className="row">
+                        <div className="col-12">
+
+
+                            <div className="col-6 float-left">
+
+                            </div>
+
+
+                        </div>
+                        <div className="col-12">
+                            <div>
+                                {bookDescription?
+                                    <div> <div dangerouslySetInnerHTML={{ __html: bookDescription }}></div>
+                                        <hr/>
+                                        <div><p className="text-muted ">Pages: {pageCount}</p></div>
+                                        <div><p className="text-muted  ">ISBN: {ISBN}</p></div>
+                                    </div> :<div className="text-center">< div className="spinner-border" role="status">
+                                    <span className="sr-only"></span>
+                                    </div>
+                                    </div>}
+                            </div>
+                        </div>
+
+                        <div className="col-12">
+
+                            <hr/>
+
+                            <h2>Ratings & Reviews</h2>
+
+                            <div className="row">
+                                <div className="col-auto">
+                                    <img src="../images/avatar_img.png" width={60} alt={""}/>
+                                </div>
+
+                                <div className="col-12">
+                                    {  <textarea value={comment} placeholder="Leave Review"
+                                         className="form-control border-1 rounded"
+                                         onChange={(event) => setComment(event.target.value)}>
+                               </textarea>}
+                                    <div>
+                                        <button className="rounded-pill btn btn-primary float-end mt-2 ps-3 pe-3 fw-bold"
+                                                onClick={commentsClickHandler}>
+                                            Post
+                                        </button>
+                                        <label className="mt-1" htmlFor="rating"> Select Rating </label>
+                                        <select  onChange={(event)=> setRating(parseInt(event.target.value))} id="rating" className="mt-1 ms-1">
+                                           <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+                                    <hr/>
+                                </div>
+                                <div className="row">
+                                    <ul className="list-group">
+                                        {commentsArray.map(comment => <CommentItem comment = {comment}/>)
+                                        }
+                                        {/*<li className="list-group-item">*/}
+                                        {/*    <div className="row">*/}
+                                        {/*        <div className="col-2 text-center float-left">*/}
+                                        {/*            <img src="../images/avatar_img.png" className="rounded-circle"/>*/}
+                                        {/*            <div>Username</div>*/}
+                                        {/*        </div>*/}
+
+                                        {/*        <div className="col-10 float-left">*/}
+                                        {/*            I really enjoyed this book it was.  I really enjoyed this book it was.*/}
+
+                                        {/*        </div>*/}
+
+                                        {/*        <div className="col-10 pl-0 float-left">*/}
+                                        {/*            <i className="fa-star fa-solid"></i>*/}
+                                        {/*        </div>*/}
+                                        {/*    </div>*/}
+                                        {/*</li>*/}
+                                        {/*<li className="list-group-item">*/}
+                                        {/*    <div className="row">*/}
+                                        {/*        <div className="col-2 text-center float-left">*/}
+                                        {/*            <img src="../images/avatar_img.png" className="rounded-circle"/>*/}
+                                        {/*            <div>Username</div>*/}
+                                        {/*        </div>*/}
+
+                                        {/*        <div className="col-10 float-left">*/}
+                                        {/*            I really enjoyed this book it was.  I really enjoyed this book it was.*/}
+
+                                        {/*        </div>*/}
+
+                                        {/*        <div className="col-10 pl-0 float-left">*/}
+                                        {/*            <i className="fa-star fa-solid"></i>*/}
+                                        {/*        </div>*/}
+                                        {/*    </div>*/}
+                                        {/*</li>*/}
+                                        {/*<li className="list-group-item">*/}
+                                        {/*    <div className="row">*/}
+                                        {/*    <div className="col-2 text-center float-left">*/}
+                                        {/*        <img src="../images/avatar_img.png" className="rounded-circle"/>*/}
+                                        {/*        <div>Username</div>*/}
+                                        {/*    </div>*/}
+
+                                        {/*        <div className="col-10 float-left">*/}
+                                        {/*        I really enjoyed this book it was.  I really enjoyed this book it was.*/}
+
+                                        {/*        </div>*/}
+
+                                        {/*    <div className="col-10 pl-0 float-left">*/}
+                                        {/*        <i className="fa-star fa-solid"></i>*/}
+                                        {/*    </div>*/}
+                                        {/*    </div>*/}
+                                        {/*</li>*/}
+
+                                    </ul>
+
+                                </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+            <pre>
+                                    {JSON.stringify(bookName,null,2)}
+                                </pre>
+            <pre>
+                                    {JSON.stringify(bookImage,null,2)}
+                                </pre>
+            <pre>
+                                    {JSON.stringify(bookAuthors,null,2)}
+                                </pre>
+            <pre>
+                                    {JSON.stringify(bookDescription,null,2)}
+                                </pre>
+
+            <pre>
+                                    {JSON.stringify(book,null,2)}
+                                </pre>
+            </div>
+
+        </>
+
+        );
+}
+export default Details;

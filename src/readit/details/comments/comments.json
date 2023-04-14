@@ -1,0 +1,23 @@
+[{
+  "_id": {
+    "$oid": "642a25d4b142aedf009720a2"
+  },
+  "comment": "This book is good",
+  "date": {
+    "$date": "2022-05-24T07:00:00.000Z"
+  },
+  "rating": 5,
+  "username": "msj408",
+  "google_id": "3ifsj39dkf"
+},{
+  "_id": {
+    "$oid": "642b3a26b142aedf009720a7"
+  },
+  "comment": "This book is cool.",
+  "date": {
+    "$date": "2022-05-24T07:00:00.000Z"
+  },
+  "rating": 5,
+  "username": "manu410",
+  "google_id": "zyTCAlFPjgYC"
+}]
