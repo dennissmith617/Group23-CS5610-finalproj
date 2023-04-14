@@ -9,7 +9,8 @@ export const findAllUsers = async () => {
 };
 
 export const findUserById = (id) => {
-    return axios.get(`${USERS_API_URL}/${id}`).then((response) => response.data);
+    // return axios.get(`${USERS_API_URL}/${id}`).then((response) => response.data);
+    return axios.get(`${USERS_API_URL}/${id}`);
 };
 
 export const createUser = (user) => {
@@ -17,7 +18,7 @@ export const createUser = (user) => {
 };
 
 export const updateUser = (newUser) => {
-    return axios.put(`${USERS_API_URL}/${newUser.id}`, newUser);
+    return axios.put(`${USERS_API_URL}/${newUser._id}`, newUser);
 };
 
 export const deleteUser = (id) => {

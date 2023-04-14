@@ -1,73 +1,113 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
+import {Link} from "react-router-dom";
+import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
-import {Link, useParams} from "react-router-dom";
-import {useNavigate} from "react-router";
-import {logoutThunk, profileThunk} from "../../services/users/users-thunks";
-import * as userService from "../../services/users/users-service";
+import { findAllUsersThunk, profileThunk } from "../../services/users/users-thunks";
+import { useNavigate } from "react-router-dom";
 
-function ProfileComponent() {
-    const { username } = useParams();
-    const { currentUser } = useSelector((state) => state.users);
-    const [profile, setProfile] = useState({});
-    const navigate = useNavigate();
+const ProfileComponent = (
+    {currentUser1 = { "_id": 1, "role": "AUTHOR", "username": "dummy", "email": "test@test.com",
+        "firstName": "Dummy", "lastName": "User", "age": 30,
+        "profilePicture": "../../images/defaultProPic.jpeg",
+        "followers": [1, 2, 3], "following": [1, 2, 3, 4, 5], "comments": ["c1", "c2"], "booksRead": 6789, "numBooksWritten": 45
+    }}
+) => {
+    let state = useSelector((state) => state.users);
     const dispatch = useDispatch();
-    console.log(currentUser);
-    const getProfile = async () => {
-        const action = await dispatch(profileThunk());
-        setProfile(action.payload);
-    };
-    const getUserByUsername = async () => {
-        const user = await userService.findUserByUsername(username);
-        setProfile(user);
-    };
-
-    const logout = async () => {
-        await dispatch(logoutThunk());
-        navigate("/readit/login");
-    };
-
+    let {currentUser} = useSelector((state) => state.users);
+    try {
+        currentUser = state.users.find((u) => u._id === state.currentUser._id);
+    } catch(error) {
+        console.log(error);
+    }
     useEffect(() => {
-        if (username) {
-            getUserByUsername();
-        } else {
-            getProfile();
-        }
+        dispatch(findAllUsersThunk());
+        dispatch(profileThunk());
     }, []);
+    const {users} = useSelector((state) => state.users);
 
-    console.log(currentUser);
-    return (
-        <>
-            <div className="position-relative">
-                <div className="row">
-                    <i className="col col-2 bi bi-book fs-4 fw-bold mt-2"></i>
-                    <div className="col "><span className="fs-4 fw-bold">Hello {currentUser.firstName}!</span>
-                        <div className="text-secondary">{currentUser.booksRead} Books Read</div>
-                    </div>
+    if (!currentUser) {
+        return (<div>Sorry you are not logged in! Create an account to view this page.</div>);
+    }
+    return(
+        <div>
+            <div className="row">
+                <div className="col-1">
+                    <i className="fs-4 bi bi-book"></i>
                 </div>
-                <img src={`/images/books.jpeg`} width="100%" height={150}  alt="book_banner"/>
-                <div className="row">
-                    <div className="col ">
-                        <br/>
-                        <Link to="/readit/edit-profile" className="clearfix">
-                            <button className="btn btn-light fw-bold rounded-pill float-end mt-3">
-                                Edit Profile
-                            </button>
-                        </Link>
-                    </div>
+                <div className="col-10">
+                    <b className="fs-3">Hi {currentUser.firstName}!</b>
+                    <div className="fs-6"><b>{currentUser.role}</b></div>
+                    <div className="wd-small-font wd-fg-color-lightgray">{currentUser.booksRead} Books Read {`${(currentUser.role === "CRITIC" || currentUser.role === "AUTHOR") ? `| ${currentUser.comments.length} Reviews Posted` : ''}`} {`${(currentUser.role === "AUTHOR") ? `| ${currentUser.numBooksWritten} Books Written` : ''}`} </div>
                 </div>
             </div>
-            <div>
-                <div className="fs-4 fw-bold">{currentUser.firstName} {currentUser.lastName}</div>
-                <div className="text-secondary">{currentUser.username}</div>
-                <div className="text-secondary mt-3">
-                    <i className="bi bi-balloon ps-2"></i><span>{currentUser.age} Years Old</span>
+            <img src={`/images/books.jpeg`} width="100%" height={150} className="mt-2" />
+            <div className="row mt-5">
+                <div className="col-8">
+                    <img src={currentUser.profilePicture} className="ms-4 wd-profile-img rounded-circle"/>
                 </div>
-                <div className="mt-3">
-                    <span className="fw-bold">100</span> <span className="text-secondary">Following</span>
-                    <span className="fw-bold ps-2">100</span> <span className="text-secondary">Followers</span>
+                <Link to="/readit/edit-profile/" className=" col-3 mt-2 ms-3">
+                    <button className=" rounded-pill btn btn-outline-dark float-end fw-bold">Edit profile</button>
+                </Link>
+
+            </div>
+            <div className="ms-4 mt-3">
+                <b className="fs-5">{currentUser.firstName} {currentUser.lastName}</b>
+                <div className="wd-small-font wd-fg-color-lightgray">@{currentUser.username}</div>
+
+                <div className="wd-fg-color-lightgray mt-2">
+                    <span className="pe-3">
+                        <i className="bi bi-envelope"> </i>
+                        {currentUser.email}
+                    </span>
+                    <span className="pe-3">
+                        <i className="bi bi-balloon"> </i>
+                        {currentUser.age} years old
+                    </span>
                 </div>
             </div>
-        </>);
-}
+            <div className="row ms-3 mt-2">
+                <div className="col-6 mt-4">
+                    <h5>Following ({currentUser.following.length})</h5>
+                    <ol>
+                        {currentUser.following.map(f => {
+                                let curr = users.find((u) => u._id === f);
+                                try {
+                                    return (
+                                        <li><Link to={`${currentUser._id}/${f}`}>{(curr.firstName) ? `${curr.firstName} ${curr.lastName}`: ''}</Link></li>
+                                    )
+                                } catch(error) {
+                                    console.log(error);
+                                    return<></>;
+                                }
+                            }
+                        )}
 
+                    </ol>
+                </div>
+                <div className="col-6 mt-4">
+                    <h5>Followers ({currentUser.followers.length})</h5>
+                    <ol>
+                        {currentUser.followers.map(f => {
+                            const curr = users.find((u) => u._id === f);
+                            try {
+                                return (
+                                    <li><Link to={`${currentUser._id}/${f}`}>{(curr.firstName) ? `${curr.firstName} ${curr.lastName}`: ''}</Link></li>
+                                )
+                            } catch(error) {
+                                console.log(error);
+                                return<></>;
+                            }})}
+                    </ol>
+                </div>
+            </div>
+            {/*<div className="ms-3 mt-4" hidden={`${(currentUser.role === "VIEWER") ? 'hidden' : ''}`}>
+                <h5>Reviews Posted:</h5>
+                <ul>
+                    {currentUser.comments.map(c => <li>"{c}"</li>)}
+                </ul>
+            </div> */}
+        </div>
+    );
+};
 export default ProfileComponent;
