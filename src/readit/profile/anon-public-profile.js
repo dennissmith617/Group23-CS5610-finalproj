@@ -1,18 +1,25 @@
 import React, { useState, useEffect } from "react";
 import * as userService from "../../services/users/users-service";
 import {Link, useNavigate, useParams} from "react-router-dom";
-import { profileThunk, logoutThunk } from "../../services/users/users-thunks";
+import {profileThunk, logoutThunk, findAllUsersThunk} from "../../services/users/users-thunks";
 import { useDispatch, useSelector } from "react-redux";
+import uuid from "uuid";
 
 function AnonymousPublicProfile() {
     const { username } = useParams();
     const [profile, setProfile] = useState({});
+    const [users, setUsers] = useState([]);
     const dispatch = useDispatch();
-    const {users} = useSelector((state) => state.users);
     const getProfile = async () => {
         const action = await dispatch(profileThunk());
         setProfile(action.payload);
     };
+
+    const getAllUsers = async () => {
+        const action = await dispatch(findAllUsersThunk());
+        setUsers(action.payload);
+    };
+
     const getUserByUsername = async () => {
         const user = await userService.findUserByUsername(username);
         setProfile(user);
@@ -20,6 +27,7 @@ function AnonymousPublicProfile() {
 
     useEffect(() => {
         if (username) {
+            getAllUsers().then(r => console.log("all users loaded"));
             getUserByUsername().then(r => console.log("loaded"));
         } else {
             getProfile();
@@ -58,13 +66,11 @@ function AnonymousPublicProfile() {
                         {profile.following &&
                             <ol>
                                 {profile.following.map(f => {
-                                    console.log(f);
                                         const curr = users.find((u) => u._id === f);
-                                        console.log(curr);
-                                        // return (
-                                        //     <li><Link to={`/readit/profile/${curr}`}>{curr.firstName} {curr.lastName}</Link>
-                                        //     </li>
-                                        // )
+                                        return (
+                                            <li><Link reloadDocument to={`/readit/profile/${curr.username}`}>{curr.firstName} {curr.lastName}</Link>
+                                            </li>
+                                        )
                                     }
                                 )}
 
@@ -78,11 +84,10 @@ function AnonymousPublicProfile() {
                         <ol>
                             {profile.followers.map(f => {
                                     const curr = users.find((u) => u._id === f);
-                                    console.log(curr)
-                                    // return (
-                                    //     <li><Link to={`/readit/profile/${curr}`}>{curr.firstName} {curr.lastName}</Link>
-                                    //     </li>
-                                    // )
+                                    return (
+                                        <li><Link reloadDocument to={`/readit/profile/${curr.username}`}>{curr.firstName} {curr.lastName}</Link>
+                                        </li>
+                                    )
                                 }
                             )}
                         </ol>}
