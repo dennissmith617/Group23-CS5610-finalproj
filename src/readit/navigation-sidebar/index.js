@@ -10,9 +10,6 @@ const NavigationSidebar = () => {
     const active = paths[2];
     return (
         <div className="list-group">
-                    <Link to="/readit/readit" className={`list-group-item ${active === 'readit'?'active':''}`}>
-                        Readit
-                    </Link>
                     <Link to="/readit/home" className={`list-group-item ${active === 'home'?'active':''}`}>
                         Home
                     </Link>

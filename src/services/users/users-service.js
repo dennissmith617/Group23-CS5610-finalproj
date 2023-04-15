@@ -8,9 +8,9 @@ export const findAllUsers = async () => {
     return response.data;
 };
 
-export const findUserById = (id) => {
-    // return axios.get(`${USERS_API_URL}/${id}`).then((response) => response.data);
-    return axios.get(`${USERS_API_URL}/${id}`);
+export const findUserById = async (id) => {
+    const response =  await axios.get(`${USERS_API_URL}/${id}`);
+    return response.data;
 };
 
 export const createUser = (user) => {
@@ -39,4 +39,9 @@ export const register = (user) => {
 
 export const profile = () => {
     return api.get(`${USERS_API_URL}/profile`);
+};
+
+export const findUserByUsername = async (username) => {
+    const response = await api.get(`${USERS_API_URL}/username/${username}`);
+    return response.data;
 };

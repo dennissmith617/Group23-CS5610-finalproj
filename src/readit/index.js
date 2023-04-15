@@ -11,6 +11,8 @@ import ProfilePublicComponent from "./profile/profile-public";
 import RegisterScreen from "./register";
 import {useSelector} from "react-redux";
 import LogoutScreen from "./logout";
+import AnonPublicProfile from "./profile/anon-public-profile";
+import AnonymousPublicProfile from "./profile/anon-public-profile";
 
 function Readit() {
     const { currentUser } = useSelector((state) => state.users);
@@ -24,8 +26,10 @@ function Readit() {
                 <div className="col-10 col-md-10 col-lg-7 col-xl-6"
                      style={{"position": "relative"}}>
                     <Routes>
+                        <Route path="/" element={<HomeComponent/>}/>
                         <Route path="home" element={<HomeComponent/>}/>
                         <Route path="profile/:lid/:vid" element={<ProfilePublicComponent/>}/>
+                        <Route path="/profile/:uid" element={<AnonymousPublicProfile />} />
                         <Route path="profile" element={<ProfileComponent/>}/>
                         <Route path="edit-profile" element={<EditProfileComponent/>}/>
                         <Route path="search" element={<SearchComponent/>}/>
