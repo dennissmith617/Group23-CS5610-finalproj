@@ -40,3 +40,9 @@ export const register = (user) => {
 export const profile = () => {
     return api.get(`${USERS_API_URL}/profile`);
 };
+export const increaseBooksRead = (id) => {
+    return axios.put(`${USERS_API_URL}/increaseBooksRead/${id}`);
+};
+export const decreaseBooksRead = (id) => {
+    return axios.put(`${USERS_API_URL}/decreaseBooksRead/${id}`);
+}

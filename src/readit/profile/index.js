@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
-import {getCommentsByBookId, getCommentsByUserId} from "../details/comments/comments-service";
+import {getCommentsByBookId, getCommentsByUserId} from "../../services/comments/comments-service";
 import { findAllUsersThunk, profileThunk } from "../../services/users/users-thunks";
 import CommentItem from "../details/comments/commentItem";
 import { useNavigate } from "react-router-dom";

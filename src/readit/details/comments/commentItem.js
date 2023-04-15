@@ -2,11 +2,12 @@ import avatar from "./images/avatar_img.png";
 import {Link} from "react-router-dom";
 
 import axios from "axios";
-import {getCommentsByBookId} from "./comments-service.js";
+import {getCommentsByBookId} from "../../../services/comments/comments-service";
 
 
 const CommentItem = (props)=> {
     const {comment} = props;
+    let currentuser = "dummy";
     const deleteButtonHandler = async (commentId) => {
         await axios.delete(`http://localhost:4000/api/comments/${commentId}`)
         return commentId
@@ -23,11 +24,14 @@ const CommentItem = (props)=> {
                     <div className="col-12" >
                         <div className="row">
                             <div className="col-7 float-left"><Link>{comment.bookTitle}</Link> </div>
-                        <div className="col-5 ">
-                            <button onClick={() => deleteButtonHandler(comment._id)} className="btn btn-danger float-end ms-1">Delete</button>
-                            <button className="btn btn-warning float-end " >Edit</button>
-                        </div>
-
+                            {currentuser === comment.username &&
+                                <div className="col-5 ">
+                                    <button onClick={() => deleteButtonHandler(comment._id)}
+                                            className="btn btn-danger float-end ms-1">Delete
+                                    </button>
+                                    <button className="btn btn-warning float-end ">Edit</button>
+                                </div>
+                            }
                         </div>
                         <div className="row">
                         <div className="fw-bold float-left col-2">  Rating:</div>

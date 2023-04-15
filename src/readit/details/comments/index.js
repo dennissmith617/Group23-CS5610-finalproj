@@ -2,7 +2,7 @@ import {useParams} from "react-router";
 import { useEffect, useState } from "react";
 import DOMPurify from "dompurify"
 import axios from "axios";
-import { useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {
     getBookTitle,
     getBookImage,
@@ -15,11 +15,25 @@ import {
     getPageCount,
     getISBN
 } from "../service/details-service";
-import {getCommentsByBookId} from "./comments-service";
+import {getCommentsByBookId, getCommentsByUserId} from "../../../services/comments/comments-service";
 import CommentItem from "../comments/commentItem.js";
 
-function Details() {
-    const { currentUser } = useSelector((state) => state.users);
+function Details(
+    {currentUser1 = { "_id": "testing", "role": "AUTHOR", "username": "dummy", "email": "test@test.com",
+    "firstName": "Dummy", "lastName": "User", "age": 30,
+    "profilePicture": "../../images/defaultProPic.jpeg",
+    "followers": [1, 2, 3], "following": [1, 2, 3, 4, 5], "comments": ["c1", "c2"], "booksRead": 6789, "numBooksWritten": 45
+}}) {
+
+    // let state = useSelector((state) => state.users);
+    // let {currentUser} = useSelector((state) => state.users);
+    // try {
+    //     currentUser = state.users.find((u) => u._id === state.currentUser._id);
+    // } catch(error) {
+    //     console.log(error);
+    // }
+    // let userid = currentUser._id
+    let userid = currentUser1._id;
     let bookImageLoading = false;
     const {username,id} = useParams()
     const [book, setBook] =useState();
@@ -39,6 +53,7 @@ function Details() {
     const commentsClickHandler = async () => {
         const newComment = {
             comment : comment,
+            // using params below will update for state once fixed.
             username: username,
             rating: rating,
             google_id :id,
@@ -50,6 +65,10 @@ function Details() {
         setComment("")
 
     };
+    const readClickHandler = async (userid) => {
+        await axios.post(`http://localhost:4000/api/users/increaseBookRead/${userid}`)
+        console.log(userid);
+    }
 
     const fetchCommentsByBookId= async (id) => {
         const response = await getCommentsByBookId(id);
@@ -124,7 +143,7 @@ function Details() {
         <div>
             <div className="row" >
                 <div className="col-3  float-left">
-                    <div className="card sticky-top" style={{top:"20px"}} >
+                    <div className="card sticky-top" >
 
                         {bookImage? <img className="card-img-top w-100" src={bookImage} alt="Card image cap"/>:
                             <div className="text-center">< div className="spinner-border  " role="status">
@@ -204,6 +223,14 @@ function Details() {
                                         </button>}
                                 </div>
 
+                                    <div className="text-sm-center">
+
+                                        <button onClick={readClickHandler(currentUser1.username)} className="btn btn-success mt-1">Read</button>
+                                    </div>
+                                        <div className="text-sm-center">
+                                        <button className="btn btn-danger mt-1">Unread</button>
+
+                                    </div>
                             </div>
                     </div>
                 </div>
@@ -244,10 +271,6 @@ function Details() {
                             <h2>Ratings & Reviews</h2>
 
                             <div className="row">
-                                <div className="col-auto">
-                                    <img src="../images/avatar_img.png" width={60} alt={""}/>
-                                </div>
-
                                 <div className="col-12">
                                     {  <textarea value={comment} placeholder="Leave Review"
                                          className="form-control border-1 rounded"
@@ -273,58 +296,6 @@ function Details() {
                                     <ul className="list-group">
                                         {commentsArray.map(comment => <CommentItem comment = {comment}/>)
                                         }
-                                        {/*<li className="list-group-item">*/}
-                                        {/*    <div className="row">*/}
-                                        {/*        <div className="col-2 text-center float-left">*/}
-                                        {/*            <img src="../images/avatar_img.png" className="rounded-circle"/>*/}
-                                        {/*            <div>Username</div>*/}
-                                        {/*        </div>*/}
-
-                                        {/*        <div className="col-10 float-left">*/}
-                                        {/*            I really enjoyed this book it was.  I really enjoyed this book it was.*/}
-
-                                        {/*        </div>*/}
-
-                                        {/*        <div className="col-10 pl-0 float-left">*/}
-                                        {/*            <i className="fa-star fa-solid"></i>*/}
-                                        {/*        </div>*/}
-                                        {/*    </div>*/}
-                                        {/*</li>*/}
-                                        {/*<li className="list-group-item">*/}
-                                        {/*    <div className="row">*/}
-                                        {/*        <div className="col-2 text-center float-left">*/}
-                                        {/*            <img src="../images/avatar_img.png" className="rounded-circle"/>*/}
-                                        {/*            <div>Username</div>*/}
-                                        {/*        </div>*/}
-
-                                        {/*        <div className="col-10 float-left">*/}
-                                        {/*            I really enjoyed this book it was.  I really enjoyed this book it was.*/}
-
-                                        {/*        </div>*/}
-
-                                        {/*        <div className="col-10 pl-0 float-left">*/}
-                                        {/*            <i className="fa-star fa-solid"></i>*/}
-                                        {/*        </div>*/}
-                                        {/*    </div>*/}
-                                        {/*</li>*/}
-                                        {/*<li className="list-group-item">*/}
-                                        {/*    <div className="row">*/}
-                                        {/*    <div className="col-2 text-center float-left">*/}
-                                        {/*        <img src="../images/avatar_img.png" className="rounded-circle"/>*/}
-                                        {/*        <div>Username</div>*/}
-                                        {/*    </div>*/}
-
-                                        {/*        <div className="col-10 float-left">*/}
-                                        {/*        I really enjoyed this book it was.  I really enjoyed this book it was.*/}
-
-                                        {/*        </div>*/}
-
-                                        {/*    <div className="col-10 pl-0 float-left">*/}
-                                        {/*        <i className="fa-star fa-solid"></i>*/}
-                                        {/*    </div>*/}
-                                        {/*    </div>*/}
-                                        {/*</li>*/}
-
                                     </ul>
 
                                 </div>
