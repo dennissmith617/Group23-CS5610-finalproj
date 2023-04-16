@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import DOMPurify from "dompurify"
 import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
+import {findCommentsbyBookThunk} from "../../../services/comments/comments-thunks";
 import {
     getBookTitle,
     getBookImage,
@@ -19,7 +20,7 @@ import {getCommentsByBookId, getCommentsByUserId} from "../../../services/commen
 import CommentItem from "../comments/commentItem.js";
 
 function Details(
-    {currentUser1 = { "_id": "testing", "role": "AUTHOR", "username": "dummy", "email": "test@test.com",
+    {currentUser1 = { "_id": "6428cfd6dfee68f431eb57d1", "role": "AUTHOR", "username": "test_2", "email": "test@test.com",
     "firstName": "Dummy", "lastName": "User", "age": 30,
     "profilePicture": "../../images/defaultProPic.jpeg",
     "followers": [1, 2, 3], "following": [1, 2, 3, 4, 5], "comments": ["c1", "c2"], "booksRead": 6789, "numBooksWritten": 45
@@ -33,7 +34,7 @@ function Details(
     //     console.log(error);
     // }
     // let userid = currentUser._id
-    let userid = currentUser1._id;
+    let userid = currentUser1.username;
     let bookImageLoading = false;
     const {username,id} = useParams()
     const [book, setBook] =useState();
@@ -49,6 +50,9 @@ function Details(
     const [rating, setRating] = useState(1);
     const [ISBN, setISBN] = useState();
     const [comment, setComment] =useState("");
+    const {comments, loading} = useSelector(
+        state => state.commentsData)
+    const dispatch = useDispatch();
 
     const commentsClickHandler = async () => {
         const newComment = {
@@ -65,9 +69,13 @@ function Details(
         setComment("")
 
     };
-    const readClickHandler = async (userid) => {
-        await axios.post(`http://localhost:4000/api/users/increaseBookRead/${userid}`)
-        console.log(userid);
+    const readClickHandler = async (user_id) => {
+        await axios.put(`http://localhost:4000/api/users/increaseBooksRead/${user_id}`)
+        console.log(user_id);
+    }
+    const unreadClickHandler = async (user_id) => {
+        await axios.put(`http://localhost:4000/api/users/decreaseBooksRead/${user_id}`)
+        console.log(user_id);
     }
 
     const fetchCommentsByBookId= async (id) => {
@@ -133,8 +141,9 @@ function Details(
         // fetchCommentsByBookId(id)
     },[]);
     useEffect(() =>{
+        dispatch(findCommentsbyBookThunk("zyTCAlFPjgYC"));
 
-        fetchCommentsByBookId(id)
+
     },[]);
 
 
@@ -225,10 +234,10 @@ function Details(
 
                                     <div className="text-sm-center">
 
-                                        <button onClick={readClickHandler(currentUser1.username)} className="btn btn-success mt-1">Read</button>
+                                        <button onClick={()=> readClickHandler(currentUser1._id)} className="btn btn-success mt-1">Read</button>
                                     </div>
                                         <div className="text-sm-center">
-                                        <button className="btn btn-danger mt-1">Unread</button>
+                                            <button onClick={()=> unreadClickHandler(currentUser1._id)} className="btn btn-danger mt-1">Unread</button>
 
                                     </div>
                             </div>
@@ -294,7 +303,7 @@ function Details(
                                 </div>
                                 <div className="row">
                                     <ul className="list-group">
-                                        {commentsArray.map(comment => <CommentItem comment = {comment}/>)
+                                        {comments.map(comment => <CommentItem comment = {comment}/>)
                                         }
                                     </ul>
 
