@@ -17,12 +17,12 @@ export const findCommentsbyBookThunk = createAsyncThunk(
         await service.getCommentsByBookId(googleId)
 )
 
-// export const updateCommentsThunk =
-//     createAsyncThunk(
-//         'comments/updateComments',
-//         async (comment) =>
-//             await service.updateComment(comment)
-//     )
+export const updateCommentsThunk =
+    createAsyncThunk(
+        'comments/updateComments',
+        async (comment) =>    await service.updateComment(comment)
+
+    )
 
 export const deleteCommentThunk = createAsyncThunk(
     'comments/deleteComment',

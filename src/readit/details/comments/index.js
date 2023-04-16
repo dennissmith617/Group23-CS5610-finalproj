@@ -65,7 +65,7 @@ function Details(
         }
         const {data}  = await axios.post('http://localhost:4000/api/comments',{comment:newComment})
         console.log(data)
-        await fetchCommentsByBookId(id)
+        dispatch(findCommentsbyBookThunk("sFX0AwAAQBAJ"));
         setComment("")
 
     };
@@ -112,7 +112,9 @@ function Details(
     }
         const fetchBookDescription= async () => {
             const response = await getBookDescription(id);
+            console.log(response)
             const sanitizedHtml = DOMPurify.sanitize(response);
+            console.log(sanitizedHtml)
             setBookDescription(sanitizedHtml)
     }
     const fetchBookReleaseDate= async () => {
@@ -141,7 +143,7 @@ function Details(
         // fetchCommentsByBookId(id)
     },[]);
     useEffect(() =>{
-        dispatch(findCommentsbyBookThunk("zyTCAlFPjgYC"));
+        dispatch(findCommentsbyBookThunk(id));
 
 
     },[]);

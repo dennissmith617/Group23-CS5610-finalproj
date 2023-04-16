@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {createCommentsThunk, deleteCommentThunk, findCommentsbyUserThunk, findCommentsbyBookThunk}
+import {createCommentsThunk, deleteCommentThunk, findCommentsbyUserThunk, findCommentsbyBookThunk, updateCommentsThunk}
     from "../services/comments/comments-thunks";
 
 const initialState = {
@@ -14,12 +14,15 @@ const commentSlice = createSlice({
         [findCommentsbyBookThunk.pending]:
             (state) => {
                 state.loading = true
-                state.posts = []
+                state.comments = []
             },
         [findCommentsbyBookThunk.fulfilled]:
             (state, { payload }) => {
+            console.log("state below")
+                console.log(state.comments)
                 state.loading = false
-                state.posts = payload
+                state.comments = payload.reverse()
+
             },
         [findCommentsbyBookThunk.rejected]:
             (state, action) => {
@@ -36,17 +39,20 @@ const commentSlice = createSlice({
             (state, { payload }) => {
                 state.loading = false
                 state.comments.push(payload)
-         }
-        // ,[updateCommentsThunk.fulfilled]:
-        //     (state, { payload }) => {
-        //         state.loading = false
-        //         const commentNdx = state.comments
-        //             .findIndex((t) => t._id === payload._id)
-        //         state.comments[commentNdx] = {
-        //             ...state.comments[commentNdx],
-        //             ...payload
-        //         }
-        //     }
+         },
+        [updateCommentsThunk.fulfilled]:
+            (state, { payload }) => {
+                state.loading = false
+                console.log(state.comments)
+                console.log(payload)
+                const commentNdx = state.comments
+                    .findIndex((comment) => comment._id === payload.comment._id)
+                state.comments[commentNdx] = {
+                    ...state.comments[commentNdx],
+                    ...payload.comment
+                }
+                // state.comments = commentNdx
+            }
     },
     reducers: { }
 });

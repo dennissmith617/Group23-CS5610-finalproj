@@ -2,12 +2,34 @@ import avatar from "./images/avatar_img.png";
 import {Link} from "react-router-dom";
 
 import axios from "axios";
-import {getCommentsByBookId} from "../../../services/comments/comments-service";
+import {getCommentsByBookId, updateComment} from "../../../services/comments/comments-service";
+import {useState} from "react";
+import {useDispatch} from "react-redux";
+import comments from "./index";
+import {findCommentsbyBookThunk, updateCommentsThunk} from "../../../services/comments/comments-thunks";
 
 
 const CommentItem = (props)=> {
+
+    let [editing, setEditing] = useState(false);
+    const [editReview, setEditReview] = useState();
+    const dispatch = useDispatch();
+    const editClickHandler = (comment) => {
+        setEditReview(comment)
+        setEditing(true);
+    }
+    const saveClickHandler = (comment) => {
+        setEditing(false)
+        dispatch(updateCommentsThunk(editReview));
+        //to implement if update not working
+        // setTimeout(()=>{
+        //     dispatch(findCommentsbyBookThunk(comment.google_id))
+        // }, 300)
+
+    }
+    console.log(editReview)
     const {comment} = props;
-    let currentuser = "dummy";
+    let currentuser = "test_2";
     const deleteButtonHandler = async (commentId) => {
         await axios.delete(`http://localhost:4000/api/comments/${commentId}`)
         return commentId
@@ -18,7 +40,7 @@ const CommentItem = (props)=> {
             <div className="row">
                 <div className="col-2 text-center float-left">
                     <img style={{height:"80px", width:"80px"}} src={avatar} className="col-12 rounded-circle"/>
-                    <div className="overflow-hidden"><Link >{comment.username}</Link></div>
+                    <div className="overflow-hidden"><a href={`/readit/profile/${comment.username}`}> {comment.username}</a></div>
                 </div>
                 <div className="col-10 float-left">
                     <div className="col-12" >
@@ -29,7 +51,11 @@ const CommentItem = (props)=> {
                                     <button onClick={() => deleteButtonHandler(comment._id)}
                                             className="btn btn-danger float-end ms-1">Delete
                                     </button>
-                                    <button className="btn btn-warning float-end ">Edit</button>
+                                    {!editing &&
+                                    <button onClick={()=>editClickHandler(comment)} className="btn btn-warning float-end ">Edit</button>
+                                    }
+                                    {editing &&
+                                    <button onClick={()=>saveClickHandler(comment)} className="btn btn-success float-end ">Save</button>}
                                 </div>
                             }
                         </div>
@@ -91,7 +117,17 @@ const CommentItem = (props)=> {
 
                         </div>
                     </div>
-                    <div className= "col-12">{comment.comment}</div>
+                    {editing &&
+                        <textarea name="newReview" id="newReview" onChange={(e)=>{
+                            setEditReview({
+                                ...editReview,
+                                comment: e.target.value
+                            })
+                        }} cols="30" rows="2"></textarea>}
+                    {!editing &&
+                    <div className= "col-12">
+                        {comment.comment}
+                    </div>}
                     <div className="col-12  d-flex justify-content-end">{date.getMonth()}/{date.getDate()}/{date.getFullYear()} {date.getHours()}:{date.getMinutes()}</div>
                 </div>
 

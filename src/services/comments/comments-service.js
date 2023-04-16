@@ -1,4 +1,6 @@
 import axios from 'axios';
+
+import {findCommentsbyBookThunk} from "./comments-thunks";
 const API_BASE = process.env.REACT_APP_API_BASE;
 const COMMENTS_API = 'http://localhost:4000/api/comments/';
 
@@ -18,4 +20,10 @@ export const getCommentsByUserId = async (userid) =>{
 export const deleteReview = async (comment_id) =>{
     const response = await axios.delete(COMMENTS_API+`bookcomments/${comment_id}`)
     return response.data
+}
+
+export const updateComment = async (comment) => {
+    const response = await axios
+        .put(COMMENTS_API+`updateComment/${comment._id}`, comment);
+    return response.data;
 }
