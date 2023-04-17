@@ -11,9 +11,8 @@ import ProfilePublicComponent from "./profile/profile-public";
 import RegisterScreen from "./register";
 import {useSelector} from "react-redux";
 import LogoutScreen from "./logout";
-import GbookScreen from "./gbooks";
-import GbookSearchScreen from "./gbooks/gbook-search";
-import GbookDetails from "./gbooks/gbook-details";
+import AnonPublicProfile from "./profile/anon-public-profile";
+import AnonymousPublicProfile from "./profile/anon-public-profile";
 
 function Readit() {
     const { currentUser } = useSelector((state) => state.users);
@@ -27,17 +26,16 @@ function Readit() {
                 <div className="col-10 col-md-10 col-lg-7 col-xl-6"
                      style={{"position": "relative"}}>
                     <Routes>
+                        <Route path="/" element={<HomeComponent/>}/>
                         <Route path="home" element={<HomeComponent/>}/>
                         <Route path="profile/:lid/:vid" element={<ProfilePublicComponent/>}/>
+                        <Route path="/profile/:uid" element={<AnonymousPublicProfile />} />
                         <Route path="profile" element={<ProfileComponent/>}/>
                         <Route path="edit-profile" element={<EditProfileComponent/>}/>
-                        <Route path="search" element={<GbookSearchScreen/>}/>
+                        <Route path="search" element={<SearchComponent/>}/>
                         <Route path="login" element={<LoginScreen/>}/>
                         <Route path="logout" element={<LogoutScreen/>}/>
                         <Route path="register" element={<RegisterScreen />}/>
-                        <Route path="gbook" element={<GbookScreen/>}/>
-                        <Route path="search/:searchterm" element={<GbookSearchScreen/>}></Route>
-                        <Route path="details/:id" element={<GbookDetails/>}></Route>
                     </Routes>
                 </div>
                 <div className="d-sm-none d-md-none d-lg-block col-lg-4 col-xl-4">
