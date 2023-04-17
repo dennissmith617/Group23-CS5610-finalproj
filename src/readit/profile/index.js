@@ -2,18 +2,20 @@ import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
+
 import {getCommentsByBookId, getCommentsByUserId} from "../../services/comments/comments-service";
 import { findAllUsersThunk, profileThunk } from "../../services/users/users-thunks";
 import CommentItem from "../details/comments/commentItem";
+
 import { useNavigate } from "react-router-dom";
 
 const ProfileComponent = (
     {currentUser1 = { "_id": 1, "role": "AUTHOR", "username": "dummy", "email": "test@test.com",
-    "firstName": "Dummy", "lastName": "User", "age": 30,
-    "profilePicture": "../../images/defaultProPic.jpeg",
-    "followers": [1, 2, 3], "following": [1, 2, 3, 4, 5], "comments": ["c1", "c2"], "booksRead": 6789, "numBooksWritten": 45
+        "firstName": "Dummy", "lastName": "User", "age": 30,
+        "profilePicture": "../../images/defaultProPic.jpeg",
+        "followers": [1, 2, 3], "following": [1, 2, 3, 4, 5], "comments": ["c1", "c2"], "booksRead": 6789, "numBooksWritten": 45
     }}
-) => {  
+) => {
     let state = useSelector((state) => state.users);
     const [commentsArray, setCommentsArray] = useState([]);
     const fetchCommentsByUserId= async (id) => {
@@ -22,12 +24,15 @@ const ProfileComponent = (
         setCommentsArray(response.reverse());
     }
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     let {currentUser} = useSelector((state) => state.users);
+
     try {
         currentUser = state.users.find((u) => u._id === state.currentUser._id);
     } catch(error) {
         console.log(error);
     }
+
     useEffect(() => {
         dispatch(findAllUsersThunk());
         dispatch(profileThunk());
@@ -35,11 +40,25 @@ const ProfileComponent = (
         // fetchCommentsByUserId(currentUser._id)
 
     }, []);
+
+    const register = () => {
+        try {
+            navigate("/readit/register");
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     const {users} = useSelector((state) => state.users);
 
     if (!currentUser) {
-        return (<div>Sorry you are not logged in! Create an account to view this page.</div>);
+        return (
+            <button onClick={register} className="btn btn-primary">
+                Sign up for an Account Here!
+            </button>
+        );
     }
+
     return(
         <div>
             <div className="row">
@@ -60,7 +79,7 @@ const ProfileComponent = (
                 <Link to="/readit/edit-profile/" className=" col-3 mt-2 ms-3">
                     <button className=" rounded-pill btn btn-outline-dark float-end fw-bold">Edit profile</button>
                 </Link>
-                
+
             </div>
             <div className="ms-4 mt-3">
                 <b className="fs-5">{currentUser.firstName} {currentUser.lastName}</b>
@@ -82,18 +101,18 @@ const ProfileComponent = (
                     <h5>Following ({currentUser.following.length})</h5>
                     <ol>
                         {currentUser.following.map(f => {
-                            let curr = users.find((u) => u._id === f);
-                            try {
-                                return (
-                                    <li><Link to={`${currentUser._id}/${f}`}>{(curr.firstName) ? `${curr.firstName} ${curr.lastName}`: ''}</Link></li>
-                                )
-                            } catch(error) {
-                                console.log(error);
-                                return<></>;
+                                let curr = users.find((u) => u._id === f);
+                                try {
+                                    return (
+                                        <li><Link to={`${currentUser._id}/${f}`}>{(curr.firstName) ? `${curr.firstName} ${curr.lastName}`: ''}</Link></li>
+                                    )
+                                } catch(error) {
+                                    console.log(error);
+                                    return<></>;
+                                }
                             }
-                        }
                         )}
-                        
+
                     </ol>
                 </div>
                 <div className="col-6 mt-4">
