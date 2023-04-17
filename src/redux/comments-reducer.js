@@ -32,8 +32,8 @@ const commentSlice = createSlice({
         [deleteCommentThunk.fulfilled] :
             (state, { payload }) => {
                 state.loading = false
-                state.comments = state.comments
-                    .filter(t => t._id !== payload)
+                console.log(payload)
+                state.comments = state.comments.filter(t => t._id !== payload)
             },
         [createCommentsThunk.fulfilled]:
             (state, { payload }) => {
@@ -42,16 +42,17 @@ const commentSlice = createSlice({
          },
         [updateCommentsThunk.fulfilled]:
             (state, { payload }) => {
+            console.log("payload below")
+            console.log(payload);
                 state.loading = false
-                console.log(state.comments)
-                console.log(payload)
                 const commentNdx = state.comments
                     .findIndex((comment) => comment._id === payload.comment._id)
+                console.log(commentNdx)
                 state.comments[commentNdx] = {
                     ...state.comments[commentNdx],
-                    ...payload.comment
+                    ...payload.comment.comment,
+                    ...payload.comment.rating
                 }
-                // state.comments = commentNdx
             }
     },
     reducers: { }

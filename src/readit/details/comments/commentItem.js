@@ -6,13 +6,18 @@ import {getCommentsByBookId, updateComment} from "../../../services/comments/com
 import {useState} from "react";
 import {useDispatch} from "react-redux";
 import comments from "./index";
-import {findCommentsbyBookThunk, updateCommentsThunk} from "../../../services/comments/comments-thunks";
+import {
+    deleteCommentThunk,
+    findCommentsbyBookThunk,
+    updateCommentsThunk
+} from "../../../services/comments/comments-thunks";
 
 
 const CommentItem = (props)=> {
-
+    const {comment} = props;
     let [editing, setEditing] = useState(false);
     const [editReview, setEditReview] = useState();
+    const [rating, setRating] = useState(comment.rating);
     const dispatch = useDispatch();
     const editClickHandler = (comment) => {
         setEditReview(comment)
@@ -28,11 +33,10 @@ const CommentItem = (props)=> {
 
     }
     console.log(editReview)
-    const {comment} = props;
-    let currentuser = "test_2";
+
+    let currentuser = "readituser10001";
     const deleteButtonHandler = async (commentId) => {
-        await axios.delete(`http://localhost:4000/api/comments/${commentId}`)
-        return commentId
+        dispatch(deleteCommentThunk(commentId))
     }
     const date = new Date(comment.createdAt);
     return (
@@ -128,7 +132,25 @@ const CommentItem = (props)=> {
                     <div className= "col-12">
                         {comment.comment}
                     </div>}
-                    <div className="col-12  d-flex justify-content-end">{date.getMonth()}/{date.getDate()}/{date.getFullYear()} {date.getHours()}:{date.getMinutes()}</div>
+
+                    {editing &&
+                        <div className="col-12">
+                            <label className="mt-1" htmlFor="rating"> Select Rating </label>
+                        <select  onChange={(event) => setEditReview({
+                            ...editReview
+                            , rating: parseInt(event.target.value)
+                        })
+                        } id="rating" className="mt-1 ms-1">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        </select>
+                            </div>}
+
+                    { !editing && <div className="col-12  d-flex justify-content-end">{date.getMonth()}/{date.getDate()}/{date.getFullYear()} {date.getHours()}:{date.getMinutes()}
+                    </div>}
                 </div>
 
                 </div>

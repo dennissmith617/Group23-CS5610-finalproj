@@ -84,62 +84,72 @@ function Details(
         setCommentsArray(response.reverse());
     }
 
-    const fetchBookName = async () =>{
-        const response =await getBookTitle(id);
-        setBookName(response)
-    };
-    const fetchGoogleRating = async () =>{
-        const response =await getGoogleRating(id);
-        const ratingInt = parseFloat(response);
-        setGoogleRating(ratingInt)
-    };
-    const fetchBookPreview = async () =>{
-        const response =await getBookPreview(id);
-        setBookPreview(response)
-    };
+    // const fetchBookName = async () =>{
+    //     const response =await getBookTitle(id);
+    //     setBookName(response)
+    //
+    // };
+    // const fetchGoogleRating = async () =>{
+    //     const response =await getGoogleRating(id);
+    //     const ratingInt = parseFloat(response);
+    //     setGoogleRating(ratingInt)
+    // };
+    // const fetchBookPreview = async () =>{
+    //     const response =await getBookPreview(id);
+    //     setBookPreview(response)
+    // };
     const fetchBook = async () =>{
         const response =await getBook(id);
         setBook(response)
+        setBookImage(response.volumeInfo.imageLinks.small)
+        setGoogleRating(response.volumeInfo.averageRating)
+        setBookAuthors(response.volumeInfo.authors)
+        setBookReleaseDate(response.volumeInfo.publishedDate)
+        setBookPreview(response.volumeInfo.previewLink)
+        setPageCount(response.volumeInfo.pageCount)
+        setISBN(response.volumeInfo.industryIdentifiers[1].identifier)
+        setBookName(response.volumeInfo.title)
+
+
     };
-    const fetchBookImage = async () =>{
-        const response =await getBookImage(id);
-        bookImageLoading = true;
-        setBookImage(response)
-    };
-    const fetchBookAuthors = async () => {
-        const response = await getAuthorNames(id);
-        setBookAuthors(response)
-    }
+    // const fetchBookImage = async () =>{
+    //     const response =await getBookImage(id);
+    //     bookImageLoading = true;
+    //   //  setBookImage(response)
+    // };
+    // const fetchBookAuthors = async () => {
+    //     const response = await getAuthorNames(id);
+    //     setBookAuthors(response)
+    // }
         const fetchBookDescription= async () => {
             const response = await getBookDescription(id);
-            console.log(response)
             const sanitizedHtml = DOMPurify.sanitize(response);
             console.log(sanitizedHtml)
             setBookDescription(sanitizedHtml)
     }
-    const fetchBookReleaseDate= async () => {
-        const response = await getBookReleaseDate(id);
-        setBookReleaseDate(response)
-    }
-    const fetchPageCount= async () => {
-        const response = await getPageCount(id);
-        setPageCount(response)
-    }
-    const fetchISBN= async () => {
-        const response = await getISBN(id);
-        setISBN(response[1].identifier)
-    }
+    // const fetchBookReleaseDate= async () => {
+    //     const response = await getBookReleaseDate(id);
+    //     setBookReleaseDate(response)
+    // }
+    // const fetchPageCount= async () => {
+    //     const response = await getPageCount(id);
+    //     setPageCount(response)
+    // }
+    // const fetchISBN= async () => {
+    //     const response = await getISBN(id);
+    //     setISBN(response[1].identifier)
+    // }
     useEffect(() =>{
-        fetchBookName();
-        fetchBookImage()
-        fetchBookAuthors()
+       //  fetchBookName();
+       // fetchBookImage()
+       // fetchBookAuthors()
         fetchBookDescription()
-        fetchBookReleaseDate()
+        //fetchBookReleaseDate()
         fetchBook()
-        fetchBookPreview()
-        fetchGoogleRating()
-        fetchPageCount()
-        fetchISBN()
+        // fetchBookPreview()
+       // fetchGoogleRating()
+       //  fetchPageCount()
+       //  fetchISBN()
         // fetchCommentsByBookId(id)
     },[]);
     useEffect(() =>{
@@ -155,7 +165,6 @@ function Details(
             <div className="row" >
                 <div className="col-3  float-left">
                     <div className="card sticky-top" >
-
                         {bookImage? <img className="card-img-top w-100" src={bookImage} alt="Card image cap"/>:
                             <div className="text-center">< div className="spinner-border  " role="status">
                             <span className="sr-only"></span>

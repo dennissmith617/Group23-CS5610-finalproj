@@ -20,7 +20,7 @@ export const findCommentsbyBookThunk = createAsyncThunk(
 export const updateCommentsThunk =
     createAsyncThunk(
         'comments/updateComments',
-        async (comment) =>    await service.updateComment(comment)
+        async (comment) => await service.updateComment(comment)
 
     )
 
