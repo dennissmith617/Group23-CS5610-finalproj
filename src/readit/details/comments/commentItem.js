@@ -23,7 +23,7 @@ const CommentItem = (props)=> {
         setEditReview(comment)
         setEditing(true);
     }
-    const saveClickHandler = (comment) => {
+    const saveClickHandler = () => {
         setEditing(false)
         dispatch(updateCommentsThunk(editReview));
         //to implement if update not working
@@ -39,6 +39,7 @@ const CommentItem = (props)=> {
         dispatch(deleteCommentThunk(commentId))
     }
     const date = new Date(comment.createdAt);
+    let time = date.toTimeString().slice(0, 5);
     return (
         <li key={comment._id} className="list-group-item">
             <div className="row">
@@ -59,7 +60,7 @@ const CommentItem = (props)=> {
                                     <button onClick={()=>editClickHandler(comment)} className="btn btn-warning float-end ">Edit</button>
                                     }
                                     {editing &&
-                                    <button onClick={()=>saveClickHandler(comment)} className="btn btn-success float-end ">Save</button>}
+                                    <button onClick={saveClickHandler} className="btn btn-success float-end ">Save</button>}
                                 </div>
                             }
                         </div>
@@ -149,7 +150,7 @@ const CommentItem = (props)=> {
                         </select>
                             </div>}
 
-                    { !editing && <div className="col-12  d-flex justify-content-end">{date.getMonth()}/{date.getDate()}/{date.getFullYear()} {date.getHours()}:{date.getMinutes()}
+                    { !editing && <div className="col-12  d-flex justify-content-end">{date.getMonth()}/{date.getDate()}/{date.getFullYear()} {time}
                     </div>}
                 </div>
 

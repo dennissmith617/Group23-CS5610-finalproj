@@ -47,11 +47,14 @@ const commentSlice = createSlice({
                 state.loading = false
                 const commentNdx = state.comments
                     .findIndex((comment) => comment._id === payload.comment._id)
-                console.log(commentNdx)
+                console.log({commentNdx})
+                console.log(payload.comment.comment)
+
                 state.comments[commentNdx] = {
                     ...state.comments[commentNdx],
-                    ...payload.comment.comment,
-                    ...payload.comment.rating
+                    comment :payload.comment.comment,
+                    rating: payload.comment.rating
+
                 }
             }
     },
