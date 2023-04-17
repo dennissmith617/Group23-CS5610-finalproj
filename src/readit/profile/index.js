@@ -1,8 +1,12 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
-import {findAllUsersThunk, profileThunk} from "../../services/users/users-thunks";
+
+import {getCommentsByBookId, getCommentsByUserId} from "../../services/comments/comments-service";
+import { findAllUsersThunk, profileThunk } from "../../services/users/users-thunks";
+import CommentItem from "../details/comments/commentItem";
+
 import { useNavigate } from "react-router-dom";
 
 const ProfileComponent = (
@@ -13,6 +17,12 @@ const ProfileComponent = (
     }}
 ) => {
     let state = useSelector((state) => state.users);
+    const [commentsArray, setCommentsArray] = useState([]);
+    const fetchCommentsByUserId= async (id) => {
+        const response = await getCommentsByUserId(id);
+        console.log(response);
+        setCommentsArray(response.reverse());
+    }
     const dispatch = useDispatch();
     const navigate = useNavigate();
     let {currentUser} = useSelector((state) => state.users);
@@ -26,6 +36,9 @@ const ProfileComponent = (
     useEffect(() => {
         dispatch(findAllUsersThunk());
         dispatch(profileThunk());
+        //current user currently undefined.
+        // fetchCommentsByUserId(currentUser._id)
+
     }, []);
 
     const register = () => {
@@ -117,6 +130,13 @@ const ProfileComponent = (
                             }})}
                     </ol>
                 </div>
+            </div>
+            <div className="row">
+                <ul className="list-group">
+                    {commentsArray.map(comment => <CommentItem comment = {comment}/>)
+                    }
+                </ul>
+
             </div>
             {/*<div className="ms-3 mt-4" hidden={`${(currentUser.role === "VIEWER") ? 'hidden' : ''}`}>
                 <h5>Reviews Posted:</h5>
