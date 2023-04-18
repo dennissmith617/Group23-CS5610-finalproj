@@ -25,9 +25,11 @@ const NavigationSidebar = () => {
                             Login
                         </Link>
                     }
+                    {!currentUser &&
                     <Link to="/readit/register" className={`list-group-item ${active === 'register'?'active':''}`}>
                         Register
                     </Link>
+                    }
                     {currentUser &&
                         <Link to="/readit/logout" className={`list-group-item ${active === 'logout'?'active':''}`}>
                             Logout

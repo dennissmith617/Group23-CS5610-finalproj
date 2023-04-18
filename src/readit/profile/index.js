@@ -118,6 +118,15 @@ const ProfileComponent = (
                     </ol>
                 </div>
             </div>
+
+            <div className="row">
+                <ul className="list-group">
+                    {commentsArray.map(comment => <CommentItem comment = {comment} canEdit={true}/>)
+                    }
+                </ul>
+
+            </div>
+
             {/*<div className="ms-3 mt-4" hidden={`${(currentUser.role === "VIEWER") ? 'hidden' : ''}`}>
                 <h5>Reviews Posted:</h5>
                 <ul>

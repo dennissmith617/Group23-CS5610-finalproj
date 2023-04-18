@@ -15,7 +15,6 @@ import AnonPublicProfile from "./profile/anon-public-profile";
 import AnonymousPublicProfile from "./profile/anon-public-profile";
 
 function Readit() {
-    const { currentUser } = useSelector((state) => state.users);
 
     return (
         <div>
@@ -29,7 +28,7 @@ function Readit() {
                         <Route path="/" element={<HomeComponent/>}/>
                         <Route path="home" element={<HomeComponent/>}/>
                         <Route path="profile/:lid/:vid" element={<ProfilePublicComponent/>}/>
-                        <Route path="/profile/:uid" element={<AnonymousPublicProfile />} />
+                        <Route path="profile/:uid" element={<AnonymousPublicProfile />} />
                         <Route path="profile" element={<ProfileComponent/>}/>
                         <Route path="edit-profile" element={<EditProfileComponent/>}/>
                         <Route path="search" element={<SearchComponent/>}/>

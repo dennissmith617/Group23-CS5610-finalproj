@@ -35,6 +35,7 @@ function RegisterScreen() {
                     onChange={(e) => {
                         setUsername(e.target.value);
                     }}
+                    placeholder="username"
                 />
             </div>
             <div className="form-group">
@@ -46,6 +47,7 @@ function RegisterScreen() {
                     onChange={(e) => {
                         setFirstName(e.target.value);
                     }}
+                    placeholder="first name"
                 />
             </div>
             <div className="form-group">
@@ -57,6 +59,7 @@ function RegisterScreen() {
                     onChange={(e) => {
                         setLastName(e.target.value);
                     }}
+                    placeholder="last name"
                 />
             </div>
             <div className="form-group">
@@ -68,6 +71,7 @@ function RegisterScreen() {
                     onChange={(e) => {
                         setEmail(e.target.value);
                     }}
+                    placeholder="email"
                 />
             </div>
             <div className="form-group">
@@ -79,6 +83,7 @@ function RegisterScreen() {
                     onChange={(e) => {
                         setAge(e.target.value);
                     }}
+                    placeholder="age"
                 />
             </div>
             <div className="form-group">
@@ -99,6 +104,7 @@ function RegisterScreen() {
                     onChange={(e) => {
                         setPassword(e.target.value);
                     }}
+                    placeholder="password"
                 />
             </div>
             <div className="form-group">
@@ -110,6 +116,7 @@ function RegisterScreen() {
                     onChange={(e) => {
                         setConfirmPassword(e.target.value);
                     }}
+                    placeholder="confirm passwords"
                 />
             </div>
             <button onClick={register} className="btn btn-primary">
