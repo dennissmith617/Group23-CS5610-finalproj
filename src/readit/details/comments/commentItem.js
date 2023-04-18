@@ -33,8 +33,8 @@ const CommentItem = (props)=> {
 
     }
     console.log(editReview)
-
-    let currentuser = "readituser10001";
+// TODO add current user using reducer below.
+    let currentuser = "sjk126";
     const deleteButtonHandler = async (commentId) => {
         dispatch(deleteCommentThunk(commentId))
     }

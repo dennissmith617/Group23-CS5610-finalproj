@@ -65,7 +65,7 @@ function Details(
         }
         const {data}  = await axios.post('http://localhost:4000/api/comments',{comment:newComment})
         console.log(data)
-        dispatch(findCommentsbyBookThunk("sFX0AwAAQBAJ"));
+        dispatch(findCommentsbyBookThunk(id));
         setComment("")
 
     };
