@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import DOMPurify from "dompurify"
 import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
-import {findCommentsbyBookThunk} from "../../../services/comments/comments-thunks";
+import {findALlCommentsThunk, findCommentsbyBookThunk} from "../../../services/comments/comments-thunks";
 import {
     getBookTitle,
     getBookImage,
@@ -33,8 +33,7 @@ function Details(
     } catch(error) {
         console.log(error);
     }
-    const userid = currentUser.username;
-    console.log(userid);
+
     let bookImageLoading = false;
     const {id} = useParams()
     const [book, setBook] =useState();
@@ -58,7 +57,7 @@ function Details(
         const newComment = {
             comment : comment,
             // using params below will update for state once fixed.
-            username: userid,
+            username: currentUser.username,
             rating: rating,
             google_id:id,
             bookTitle: bookName
@@ -289,8 +288,8 @@ function Details(
                             <hr/>
 
                             <h2>Ratings & Reviews</h2>
-
                             <div className="row">
+                                {currentUser &&
                                 <div className="col-12">
                                     {  <textarea value={comment} placeholder="Leave Review"
                                          className="form-control border-1 rounded"
@@ -312,6 +311,7 @@ function Details(
                                     </div>
                                     <hr/>
                                 </div>
+                                }
                                 <div className="row">
                                     <ul className="list-group">
 

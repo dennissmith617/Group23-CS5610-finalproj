@@ -37,7 +37,6 @@ const CommentItem = (props)=> {
     }
     console.log(editReview)
 
-    let currentuser = currentUser.username;
     const deleteButtonHandler = async (commentId) => {
         dispatch(deleteCommentThunk(commentId))
     }
@@ -54,7 +53,7 @@ const CommentItem = (props)=> {
                     <div className="col-12" >
                         <div className="row">
                             <div className="col-7 float-left"><Link>{comment.bookTitle}</Link> </div>
-                            {currentuser === comment.username && canEdit &&
+                            {currentUser && currentUser.username === comment.username && canEdit &&
                                 <div className="col-5 ">
                                     <button onClick={() => deleteButtonHandler(comment._id)}
                                             className="btn btn-danger float-end ms-1">Delete
