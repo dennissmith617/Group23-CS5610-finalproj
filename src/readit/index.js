@@ -11,8 +11,16 @@ import ProfilePublicComponent from "./profile/profile-public";
 import RegisterScreen from "./register";
 import {useSelector} from "react-redux";
 import LogoutScreen from "./logout";
+
+import Details from "./details/comments";
+
 import AnonPublicProfile from "./profile/anon-public-profile";
 import AnonymousPublicProfile from "./profile/anon-public-profile";
+
+import GbookScreen from "./gbooks";
+import GbookSearchScreen from "./gbooks/gbook-search";
+import GbookDetails from "./gbooks/gbook-details";
+
 
 function Readit() {
 
@@ -31,10 +39,15 @@ function Readit() {
                         <Route path="profile/:uid" element={<AnonymousPublicProfile />} />
                         <Route path="profile" element={<ProfileComponent/>}/>
                         <Route path="edit-profile" element={<EditProfileComponent/>}/>
-                        <Route path="search" element={<SearchComponent/>}/>
                         <Route path="login" element={<LoginScreen/>}/>
                         <Route path="logout" element={<LogoutScreen/>}/>
                         <Route path="register" element={<RegisterScreen />}/>
+                        <Route path="details/:id" element={<Details/>}/>
+                        <Route path="details/:username/:id" element={<Details/>}/>
+                        <Route path="search" element={<GbookSearchScreen/>}/>
+                        <Route path="gbook" element={<GbookScreen/>}/>
+                        <Route path="search/:searchterm" element={<GbookSearchScreen/>}></Route>
+                        <Route path="details/:id" element={<GbookDetails/>}></Route>
                     </Routes>
                 </div>
                 <div className="d-sm-none d-md-none d-lg-block col-lg-4 col-xl-4">

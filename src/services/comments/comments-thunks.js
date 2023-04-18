@@ -1,16 +1,15 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import * as service from "./comments-service.js";
 
+
 export const findALlCommentsThunk = createAsyncThunk("comments/findAll", async () => {
-    const comments = await service.findAllComments();
-    return comments;
+    return await service.findAllComments();
 });
 
 export const createCommentsThunk = createAsyncThunk(
     'comments/createComments',
     async (comment) => {
-        const newComment = await service.createReview(comment)
-        return newComment
+        return await service.createReview(comment)
     })
 
 export const findCommentsbyUserThunk = createAsyncThunk(

@@ -15,6 +15,7 @@ import {
 
 const CommentItem = (props)=> {
     const {comment, canEdit} = props;
+
     let [editing, setEditing] = useState(false);
     const [editReview, setEditReview] = useState();
     const [rating, setRating] = useState(comment.rating);
@@ -111,7 +112,7 @@ const CommentItem = (props)=> {
                                 <i className="text-warning bi bi-star"></i>
                             </div>}
                         {comment.rating===5 &&
-                            <div className ="float-left col-6">
+                            <div className className="float-left col-6">
                                 <i className="text-warning bi bi-star-fill"></i>
                                 <i className="text-warning bi bi-star-fill"></i>
                                 <i className=" text-warning bi bi-star-fill"></i>

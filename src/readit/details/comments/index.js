@@ -314,8 +314,8 @@ function Details(
                                 </div>
                                 <div className="row">
                                     <ul className="list-group">
-                                        {comments.map(comment => <CommentItem comment = {comment} canEdit={true}/>)
-                                        }
+
+                                        {comments.map(comment => <CommentItem comment = {comment} canEdit={true}/>)}
                                     </ul>
 
                                 </div>
