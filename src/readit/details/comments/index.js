@@ -26,17 +26,17 @@ function Details(
     "followers": [1, 2, 3], "following": [1, 2, 3, 4, 5], "comments": ["c1", "c2"], "booksRead": 6789, "numBooksWritten": 45
 }}) {
 
-    // let state = useSelector((state) => state.users);
-    // let {currentUser} = useSelector((state) => state.users);
-    // try {
-    //     currentUser = state.users.find((u) => u._id === state.currentUser._id);
-    // } catch(error) {
-    //     console.log(error);
-    // }
-    // let userid = currentUser._id
-    let userid = currentUser1.username;
+    let state = useSelector((state) => state.users);
+    let {currentUser} = useSelector((state) => state.users);
+    try {
+        currentUser = state.users.find((u) => u._id === state.currentUser._id);
+    } catch(error) {
+        console.log(error);
+    }
+    const userid = currentUser.username;
+    console.log(userid);
     let bookImageLoading = false;
-    const {username,id} = useParams()
+    const {id} = useParams()
     const [book, setBook] =useState();
     const [bookName, setBookName] =useState();
     const [googleRating, setGoogleRating] =useState(0);
@@ -58,9 +58,9 @@ function Details(
         const newComment = {
             comment : comment,
             // using params below will update for state once fixed.
-            username: username,
+            username: userid,
             rating: rating,
-            google_id :id,
+            google_id:id,
             bookTitle: bookName
         }
         const {data}  = await axios.post('http://localhost:4000/api/comments',{comment:newComment})

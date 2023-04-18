@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import axios from "axios";
 import {getCommentsByBookId, updateComment} from "../../../services/comments/comments-service";
 import {useState} from "react";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import comments from "./index";
 import {
     deleteCommentThunk,
@@ -15,6 +15,8 @@ import {
 
 const CommentItem = (props)=> {
     const {comment, canEdit} = props;
+    const { currentUser } = useSelector((state) => state.users);
+
 
     let [editing, setEditing] = useState(false);
     const [editReview, setEditReview] = useState();
@@ -35,7 +37,7 @@ const CommentItem = (props)=> {
     }
     console.log(editReview)
 
-    let currentuser = "readituser10001";
+    let currentuser = currentUser.username;
     const deleteButtonHandler = async (commentId) => {
         dispatch(deleteCommentThunk(commentId))
     }

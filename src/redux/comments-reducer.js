@@ -29,6 +29,24 @@ const commentSlice = createSlice({
                 state.loading = false
                 state.error = action.error
             },
+        [findCommentsbyUserThunk.pending]:
+            (state) => {
+                state.loading = true
+                state.comments = []
+            },
+        [findCommentsbyUserThunk.fulfilled]:
+            (state, { payload }) => {
+                console.log("state below")
+                console.log(state.comments)
+                state.loading = false
+                state.comments = payload.reverse()
+
+            },
+        [findCommentsbyUserThunk.rejected]:
+            (state, action) => {
+                state.loading = false
+                state.error = action.error
+            },
         [deleteCommentThunk.fulfilled] :
             (state, { payload }) => {
                 state.loading = false
