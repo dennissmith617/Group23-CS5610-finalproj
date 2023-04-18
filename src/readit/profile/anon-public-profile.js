@@ -57,9 +57,7 @@ function AnonymousPublicProfile() {
             }
         } else {
             newFollowingList.push(uid);
-            console.log(newFollowersList);
             newFollowersList.push(currentUser._id);
-            console.log(newFollowersList);
         }
         const newCurrentUser = {...currentUser, following: newFollowingList};
         const newProfileUser = {...profile, followers: newFollowersList};
