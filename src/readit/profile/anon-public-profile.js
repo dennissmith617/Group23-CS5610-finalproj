@@ -45,20 +45,30 @@ function AnonymousPublicProfile() {
     const followHandler = () => {
         let newFollowingList = Array.from(currentUser.following);
         let newFollowersList = Array.from(profile.followers);
+        console.log(newFollowersList);
         if (following) {
-            newFollowingList.pop(uid);
-            newFollowersList.pop(currentUser._id);
+            const followingIndex = newFollowingList.indexOf(uid);
+            if (followingIndex != -1) {
+                newFollowingList.splice(followingIndex, 1);
+            }
+            const followersIndex = newFollowersList.indexOf(currentUser._id);
+            if (followersIndex != -1) {
+                newFollowersList.splice(followersIndex, 1);
+            }
         } else {
             newFollowingList.push(uid);
+            console.log(newFollowersList);
             newFollowersList.push(currentUser._id);
+            console.log(newFollowersList);
         }
-        const newLidUser = {...(users.find((u) => u._id === currentUser._id)), following: newFollowingList};
-        const newVidUser = {...profile, followers: newFollowersList};
-        console.log(newVidUser);
-        //updateUserThunk not updating database
-        dispatch(updateUserThunk(newLidUser));
-        dispatch(updateUserThunk(newVidUser));
+        const newCurrentUser = {...currentUser, following: newFollowingList};
+        const newProfileUser = {...profile, followers: newFollowersList};
+        console.log(newProfileUser.followers);
+        // updateUserThunk not updating database
+        dispatch(updateUserThunk(newCurrentUser));
+        dispatch(updateUserThunk(newProfileUser));
         setFollowing(!following);
+        setProfile(newProfileUser);
     }
 
     const navigate = useNavigate();
