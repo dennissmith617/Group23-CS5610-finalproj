@@ -3,12 +3,10 @@ import * as userService from "../../services/users/users-service";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {profileThunk, updateUserThunk, findAllUsersThunk} from "../../services/users/users-thunks";
 import { useDispatch, useSelector } from "react-redux";
-import ProfilePublicComponent from "./profile-public";
-import uuid from "uuid";
 
 function AnonymousPublicProfile() {
     const { uid } = useParams();
-    const [profile, setProfile] = useState({});
+    const [profile, setProfile] = useState({followers:[]});
     const [users, setUsers] = useState([]);
     const {currentUser} = useSelector((state) => state.users);
     const dispatch = useDispatch();
@@ -27,8 +25,6 @@ function AnonymousPublicProfile() {
         setProfile(user);
     };
 
-    const [following, setFollowing] = useState((currentUser) ? currentUser.following.includes(uid) : false);
-
     useEffect(() => {
         if (uid) {
             getAllUsers().then(r => console.log("all users loaded"));
@@ -36,36 +32,33 @@ function AnonymousPublicProfile() {
         } else {
             getProfile();
         }
-        if (currentUser) {
-            setFollowing(currentUser.following.includes(uid));
-        }
     }, [currentUser, uid]);
 
-    //fix functionality
     const followHandler = () => {
-        let newFollowingList = Array.from(currentUser.following);
+        const currUser = (users.find((u) => u._id === currentUser._id));
+        let newFollowingList = Array.from(currUser.following);
         let newFollowersList = Array.from(profile.followers);
-        console.log(newFollowersList);
-        if (following) {
+        console.log(currUser);
+        console.log(newFollowingList);
+        if (profile.followers.includes(currentUser._id)) {
             const followingIndex = newFollowingList.indexOf(uid);
-            if (followingIndex != -1) {
+            if (followingIndex !== -1) {
                 newFollowingList.splice(followingIndex, 1);
             }
             const followersIndex = newFollowersList.indexOf(currentUser._id);
-            if (followersIndex != -1) {
+            if (followersIndex !== -1) {
                 newFollowersList.splice(followersIndex, 1);
             }
         } else {
             newFollowingList.push(uid);
             newFollowersList.push(currentUser._id);
         }
-        const newCurrentUser = {...currentUser, following: newFollowingList};
+        const newCurrentUser = {...currUser, following: newFollowingList};
         const newProfileUser = {...profile, followers: newFollowersList};
-        console.log(newProfileUser.followers);
-        // updateUserThunk not updating database
+        console.log(newCurrentUser.following);
         dispatch(updateUserThunk(newCurrentUser));
         dispatch(updateUserThunk(newProfileUser));
-        setFollowing(!following);
+        getAllUsers();
         setProfile(newProfileUser);
     }
 
@@ -94,7 +87,7 @@ function AnonymousPublicProfile() {
                     </div>
                     <span className="col-3 mt-2 ms-3">
                         {currentUser && 
-                            <button onClick={followHandler} className={`rounded-pill btn ${(following) ? "btn-dark" : "btn-outline-dark"} float-end fw-bold`}>{(following) ? "Following" : "Follow"}</button>}
+                            <button onClick={followHandler} className={`rounded-pill btn ${(profile.followers.includes(currentUser._id)) ? "btn-dark" : "btn-outline-dark"} float-end fw-bold`}>{(profile.followers.includes(currentUser._id)) ? "Following" : "Follow"}</button>}
                         {!currentUser &&
                             <button onClick={registerHandler} className={`rounded-pill btn btn-primary float-end fw-bold`}>Register</button>}
                     </span>
@@ -111,10 +104,15 @@ function AnonymousPublicProfile() {
                             <ol>
                                 {profile.following.map(f => {
                                         const curr = users.find((u) => u._id === f);
-                                        return (
-                                            <li><Link reloadDocument to={(currentUser && currentUser._id === curr._id) ? '/readit/profile' : `/readit/profile/${curr._id}`}>{curr.firstName} {curr.lastName}</Link>
-                                            </li>
-                                        )
+                                        try{
+                                            return (
+                                                <li><Link reloadDocument to={(currentUser && currentUser._id === curr._id) ? '/readit/profile' : `/readit/profile/${curr._id}`}>{curr.firstName} {curr.lastName}</Link>
+                                                </li>
+                                            )
+                                        } catch (error) {
+                                            console.log(error);
+                                        }
+                                        
                                     }
                                 )}
 
@@ -127,22 +125,21 @@ function AnonymousPublicProfile() {
                         <ol>
                             {profile.followers.map(f => {
                                     const curr = users.find((u) => u._id === f);
-                                    return (
-                                        <li><Link reloadDocument to={(currentUser && currentUser._id === curr._id) ? '/readit/profile' : `/readit/profile/${curr._id}`}>{curr.firstName} {curr.lastName}</Link>
-                                        </li>
-                                    )
+                                    try {
+                                        return (
+                                            <li><Link reloadDocument to={(currentUser && currentUser._id === curr._id) ? '/readit/profile' : `/readit/profile/${curr._id}`}>{curr.firstName} {curr.lastName}</Link>
+                                            </li>
+                                        )
+                                    } catch (err) {
+                                        console.log(err);
+                                    }
+                                    
                                 }
                             )}
                         </ol>}
                     </div>
                 </div>
-                {/* <div className="ms-3 mt-4" hidden={`${(profile.role === "VIEWER") ? 'hidden' : ''}`}>
-                <h5>Comments Posted:</h5>
-                <ul>
-                    {profile.comments.map(c => <li>"{c}"</li>)}
-                </ul>
-            </div> */}
-            {/**add another section for books read?  */}
+                
             </div>
         );
     }

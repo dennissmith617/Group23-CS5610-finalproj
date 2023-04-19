@@ -7,11 +7,9 @@ import ProfileComponent from "./profile";
 import EditProfileComponent from "./edit-profile";
 import SearchComponent from "./search";
 import LoginScreen from "./login";
-import ProfilePublicComponent from "./profile/profile-public";
 import RegisterScreen from "./register";
 import {useSelector} from "react-redux";
 import LogoutScreen from "./logout";
-import AnonPublicProfile from "./profile/anon-public-profile";
 import AnonymousPublicProfile from "./profile/anon-public-profile";
 
 function Readit() {
