@@ -54,10 +54,12 @@ function Details(
     const dispatch = useDispatch();
 
     const commentsClickHandler = async () => {
+        console.log(currentUser);
         const newComment = {
             comment : comment,
             // using params below will update for state once fixed.
             username: currentUser.username,
+            userId: currentUser._id,
             rating: rating,
             google_id:id,
             bookTitle: bookName
@@ -156,7 +158,6 @@ function Details(
 
 
     },[]);
-
 
     return (
         <>

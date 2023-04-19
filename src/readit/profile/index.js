@@ -26,7 +26,6 @@ const ProfileComponent = (
     const dispatch = useDispatch();
     const navigate = useNavigate();
     let {currentUser} = useSelector((state) => state.users);
-
     try {
         currentUser = state.users.find((u) => u._id === state.currentUser._id);
     } catch(error) {

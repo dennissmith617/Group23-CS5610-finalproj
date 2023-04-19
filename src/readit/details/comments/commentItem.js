@@ -47,7 +47,7 @@ const CommentItem = (props)=> {
             <div className="row">
                 <div className="col-2 text-center float-left">
                     <img style={{height:"80px", width:"80px"}} src={avatar} className="col-12 rounded-circle"/>
-                    <div className="overflow-hidden"><a href={`/readit/profile/username/${comment.username}`}> {comment.username}</a></div>
+                    <div className="overflow-hidden"><a href={`/readit/profile/${comment.userId}`}> {comment.username}</a></div>
                 </div>
                 <div className="col-10 float-left">
                     <div className="col-12" >
