@@ -58,7 +58,7 @@ function Details(
             comment : comment,
             // using params below will update for state once fixed.
             username: currentUser.username,
-            userId: currentUser.userId,
+            userId: currentUser._id,
             rating: rating,
             google_id:id,
             bookTitle: bookName
