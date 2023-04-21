@@ -60,6 +60,7 @@ function Details(
         const newComment = {
             comment : comment,
             username: currentUser.username,
+            userId: currentUser.userId,
             rating: rating,
             google_id: id,
             bookTitle: bookName

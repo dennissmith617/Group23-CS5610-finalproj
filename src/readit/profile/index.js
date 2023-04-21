@@ -8,6 +8,7 @@ import { findAllUsersThunk, profileThunk } from "../../services/users/users-thun
 import CommentItem from "../details/comments/commentItem";
 
 import { useNavigate } from "react-router-dom";
+import {getBooksRead} from "../../services/users/users-service";
 
 const ProfileComponent = (
     {currentUser1 = { "_id": 1, "role": "AUTHOR", "username": "dummy", "email": "test@test.com",
@@ -18,7 +19,7 @@ const ProfileComponent = (
 ) => {
     let state = useSelector((state) => state.users);
     const [commentsArray, setCommentsArray] = useState([]);
-
+    const [booksReadArray, setBooksReadArray] =useState([]);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     let {currentUser} = useSelector((state) => state.users);
@@ -33,11 +34,17 @@ const ProfileComponent = (
         console.log(response);
         setCommentsArray(response.reverse());
     }
+    const fetchBooksRead= async () => {
+        const response = await getBooksRead(currentUser._id);
+        console.log(response);
+        setCommentsArray(response);
+    }
     useEffect(() => {
         dispatch(findAllUsersThunk());
         dispatch(profileThunk());
         //current user currently undefined.
         fetchCommentsByUserId("6429871025911bc4641acf1e")
+        fetchBooksRead("6429871025911bc4641acf1e")
 
     }, []);
 
@@ -135,6 +142,14 @@ const ProfileComponent = (
                 <ul className="list-group">
                     <li className="list-group-item text-lg-center fw-bold" style={{fontSize:20}}> Reviews </li>
                     {commentsArray.map(comment => <CommentItem comment = {comment}/>)
+                    }
+                </ul>
+
+            </div>
+            <div className="row">
+                <ul className="list-group">
+                    <li className="list-group-item text-lg-center fw-bold" style={{fontSize:20}}> Books Read </li>
+                    {booksReadArray.map(bookRead => <li className={booksReadArray}> <a href={`/readit/details/${bookRead}`}></a></li>)
                     }
                 </ul>
 
