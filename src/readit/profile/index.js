@@ -30,12 +30,12 @@ const ProfileComponent = (
         console.log(error);
     }
     const fetchCommentsByUserId= async () => {
-        const response = await getCommentsByUserId(currentUser.username);
+        const response = await getCommentsByUserId();
         console.log(response);
         setCommentsArray(response.reverse());
     }
     const fetchBooksRead= async () => {
-        const response = await getBooksRead(currentUser._id);
+        const response = await getBooksRead();
         console.log(response);
         setCommentsArray(response);
     }
@@ -43,8 +43,8 @@ const ProfileComponent = (
         dispatch(findAllUsersThunk());
         dispatch(profileThunk());
         //current user currently undefined.
-        fetchCommentsByUserId("6429871025911bc4641acf1e")
-        fetchBooksRead("6429871025911bc4641acf1e")
+        //TODO fetch comments and booksread
+
 
     }, []);
 
@@ -141,7 +141,7 @@ const ProfileComponent = (
             <div className="row">
                 <ul className="list-group">
                     <li className="list-group-item text-lg-center fw-bold" style={{fontSize:20}}> Reviews </li>
-                    {commentsArray.map(comment => <CommentItem comment = {comment}/>)
+                    {commentsArray.map(comment => <CommentItem comment = {comment} canEdit={false}/>)
                     }
                 </ul>
 
