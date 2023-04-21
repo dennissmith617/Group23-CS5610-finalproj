@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import axios from "axios";
 import {getCommentsByBookId, updateComment} from "../../../services/comments/comments-service";
 import {useState} from "react";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import comments from "./index";
 import {
     deleteCommentThunk,
@@ -14,7 +14,10 @@ import {
 
 
 const CommentItem = (props)=> {
-    const {comment} = props;
+    const {comment, canEdit} = props;
+    const { currentUser } = useSelector((state) => state.users);
+
+
     let [editing, setEditing] = useState(false);
     const [editReview, setEditReview] = useState();
     const [rating, setRating] = useState(comment.rating);
@@ -34,7 +37,6 @@ const CommentItem = (props)=> {
     }
     console.log(editReview)
 
-    let currentuser = "readituser10001";
     const deleteButtonHandler = async (commentId) => {
         dispatch(deleteCommentThunk(commentId))
     }
@@ -45,13 +47,13 @@ const CommentItem = (props)=> {
             <div className="row">
                 <div className="col-2 text-center float-left">
                     <img style={{height:"80px", width:"80px"}} src={avatar} className="col-12 rounded-circle"/>
-                    <div className="overflow-hidden"><a href={`/readit/profile/${comment.username}`}> {comment.username}</a></div>
+                    <div className="overflow-hidden"><a href={`/readit/profile/${comment.userId}`}> {comment.username}</a></div>
                 </div>
                 <div className="col-10 float-left">
                     <div className="col-12" >
                         <div className="row">
                             <div className="col-7 float-left"><Link>{comment.bookTitle}</Link> </div>
-                            {currentuser === comment.username &&
+                            {currentUser && currentUser.username === comment.username && canEdit &&
                                 <div className="col-5 ">
                                     <button onClick={() => deleteButtonHandler(comment._id)}
                                             className="btn btn-danger float-end ms-1">Delete

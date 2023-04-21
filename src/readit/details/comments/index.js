@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import DOMPurify from "dompurify"
 import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
-import {findCommentsbyBookThunk} from "../../../services/comments/comments-thunks";
+import {findALlCommentsThunk, findCommentsbyBookThunk} from "../../../services/comments/comments-thunks";
 import {
     getBookTitle,
     getBookImage,
@@ -26,17 +26,16 @@ function Details(
     "followers": [1, 2, 3], "following": [1, 2, 3, 4, 5], "comments": ["c1", "c2"], "booksRead": 6789, "numBooksWritten": 45
 }}) {
 
-    // let state = useSelector((state) => state.users);
-    // let {currentUser} = useSelector((state) => state.users);
-    // try {
-    //     currentUser = state.users.find((u) => u._id === state.currentUser._id);
-    // } catch(error) {
-    //     console.log(error);
-    // }
-    // let userid = currentUser._id
-    let userid = currentUser1.username;
+    let state = useSelector((state) => state.users);
+    let {currentUser} = useSelector((state) => state.users);
+    try {
+        currentUser = state.users.find((u) => u._id === state.currentUser._id);
+    } catch(error) {
+        console.log(error);
+    }
+
     let bookImageLoading = false;
-    const {username,id} = useParams()
+    const {id} = useParams()
     const [book, setBook] =useState();
     const [bookName, setBookName] =useState();
     const [googleRating, setGoogleRating] =useState(0);
@@ -55,12 +54,14 @@ function Details(
     const dispatch = useDispatch();
 
     const commentsClickHandler = async () => {
+        console.log(currentUser);
         const newComment = {
             comment : comment,
             // using params below will update for state once fixed.
-            username: username,
+            username: currentUser.username,
+            userId: currentUser._id,
             rating: rating,
-            google_id :id,
+            google_id:id,
             bookTitle: bookName
         }
         const {data}  = await axios.post('http://localhost:4000/api/comments',{comment:newComment})
@@ -157,7 +158,6 @@ function Details(
 
 
     },[]);
-
 
     return (
         <>
@@ -289,8 +289,8 @@ function Details(
                             <hr/>
 
                             <h2>Ratings & Reviews</h2>
-
                             <div className="row">
+                                {currentUser &&
                                 <div className="col-12">
                                     {  <textarea value={comment} placeholder="Leave Review"
                                          className="form-control border-1 rounded"
@@ -312,10 +312,11 @@ function Details(
                                     </div>
                                     <hr/>
                                 </div>
+                                }
                                 <div className="row">
                                     <ul className="list-group">
-                                        {comments.map(comment => <CommentItem comment = {comment}/>)
-                                        }
+
+                                        {comments.map(comment => <CommentItem comment = {comment} canEdit={true}/>)}
                                     </ul>
 
                                 </div>

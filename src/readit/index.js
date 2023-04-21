@@ -21,7 +21,6 @@ import GbookDetails from "./gbooks/gbook-details";
 
 
 function Readit() {
-    const { currentUser } = useSelector((state) => state.users);
 
     return (
         <div>
@@ -47,9 +46,6 @@ function Readit() {
                         <Route path="search/:searchterm" element={<GbookSearchScreen/>}></Route>
                         <Route path="details/:id" element={<GbookDetails/>}></Route>
                     </Routes>
-                </div>
-                <div className="d-sm-none d-md-none d-lg-block col-lg-4 col-xl-4">
-                     <WhoToFollowList/>
                 </div>
             </div>
         </div>

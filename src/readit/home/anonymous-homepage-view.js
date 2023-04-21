@@ -1,6 +1,25 @@
-import React  from "react";
+import React, {useEffect, useState} from "react";
+import {findALlCommentsThunk} from "../../services/comments/comments-thunks";
+import {useDispatch} from "react-redux";
+import {getBook} from "../gbooks/gbook-service";
+import avatar from "../details/comments/images/avatar_img.png";
+import {Link} from "react-router-dom";
+import CommentItem from "../details/comments/commentItem";
 
 function AnonymousHomePage() {
+
+    const [comments, setComments] = useState([]);
+    const dispatch = useDispatch();
+
+    const getAllComments = async () => {
+        const action = await dispatch(findALlCommentsThunk());
+        setComments(action.payload.sort((a,b)=> a.timestamps - b.timestamps).reverse().slice(0,3));
+    };
+    useEffect(() => {
+        getAllComments().then(r => console.log("all comments loaded"));
+
+    }, []);
+
    return (
        <div className="position-relative mb-2">
            <img src="/images/books.jpeg" className="w-100" alt="book header"/>
@@ -8,25 +27,10 @@ function AnonymousHomePage() {
            <h2>Trying to decide your next read?</h2>
            <paragraph>Look no further than Readit! When you sign up, you can connect with friends and find new books.</paragraph>
 
-           <h2>Books Our Users have been LOVING</h2>
+           <h2>Latest Reviews from Our Users</h2>
 
-           <div className="row p-3 mb-2 bg-primary text-white rounded" >
-               <div className="col-lg-4 col-md-4 col-xs-4 thumb">
-                   <a className="thumbnail" href="#">
-                       <img className="img-responsive" src="/images/harlem_shuffle.jpeg" alt=""/>
-                   </a>
-               </div>
-               <div className="col-lg-4 col-md-4 col-xs-4 thumb">
-                   <a className="thumbnail" href="#">
-                       <img className="img-responsive" src="/images/lessons_in_chemistry.jpeg" alt=""/>
-                   </a>
-               </div>
-               <div className="col-lg-4 col-md-4 col-xs-4 thumb">
-                   <a className="thumbnail" href="#">
-                       <img className="img-responsive" src="/images/man_who_died.jpeg" alt=""/>
-                   </a>
-               </div>
-           </div>
+           {comments.map(comment => <CommentItem comment = {comment} canEdit={false}/>)
+           }
 
        </div>
     )

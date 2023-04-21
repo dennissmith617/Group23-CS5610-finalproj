@@ -20,6 +20,7 @@ function AnonymousPublicProfile() {
         setUsers(action.payload);
     };
 
+
     const getUserById = async () => {
         const user = await userService.findUserById(uid);
         setProfile(user);
