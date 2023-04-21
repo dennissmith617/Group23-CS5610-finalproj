@@ -41,13 +41,16 @@ export const profile = () => {
     return api.get(`${USERS_API_URL}/profile`);
 };
 
-export const increaseBooksRead = (id) => {
-    return axios.put(`${USERS_API_URL}/increaseBooksRead/${id}`);
+export const bookRead = (user_id,google_id) => {
+    return axios.put(`${USERS_API_URL}/bookread/${user_id}/${google_id}`);
 };
-export const decreaseBooksRead = (id) => {
-    return axios.put(`${USERS_API_URL}/decreaseBooksRead/${id}`);
+export const bookUnread = (user_id, google_id) => {
+    return axios.put(`${USERS_API_URL}/bookunread/${user_id}/${google_id}`);
 }
 
+export const bookReadStatus = (user_id, google_id) => {
+    return axios.get(`${USERS_API_URL}/bookreadstatus/${user_id}/${google_id}`)
+}
 
 export const findUserByUsername = async (username) => {
     const response = await api.get(`${USERS_API_URL}/username/${username}`);

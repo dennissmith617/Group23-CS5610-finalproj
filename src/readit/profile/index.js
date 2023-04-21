@@ -18,11 +18,7 @@ const ProfileComponent = (
 ) => {
     let state = useSelector((state) => state.users);
     const [commentsArray, setCommentsArray] = useState([]);
-    const fetchCommentsByUserId= async (id) => {
-        const response = await getCommentsByUserId(id);
-        console.log(response);
-        setCommentsArray(response.reverse());
-    }
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     let {currentUser} = useSelector((state) => state.users);
@@ -32,12 +28,16 @@ const ProfileComponent = (
     } catch(error) {
         console.log(error);
     }
-
+    const fetchCommentsByUserId= async () => {
+        const response = await getCommentsByUserId(currentUser.username);
+        console.log(response);
+        setCommentsArray(response.reverse());
+    }
     useEffect(() => {
         dispatch(findAllUsersThunk());
         dispatch(profileThunk());
         //current user currently undefined.
-        // fetchCommentsByUserId(currentUser._id)
+        fetchCommentsByUserId("6429871025911bc4641acf1e")
 
     }, []);
 
@@ -133,6 +133,7 @@ const ProfileComponent = (
             </div>
             <div className="row">
                 <ul className="list-group">
+                    <li className="list-group-item text-lg-center fw-bold" style={{fontSize:20}}> Reviews </li>
                     {commentsArray.map(comment => <CommentItem comment = {comment}/>)
                     }
                 </ul>

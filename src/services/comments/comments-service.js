@@ -12,8 +12,8 @@ export const getCommentsByBookId = async (google_id) =>{
     const response = await axios.get(COMMENTS_API+`bookcomments/${google_id}`)
     return response.data
 }
-export const getCommentsByUserId = async (userid) =>{
-    const response = await axios.get(COMMENTS_API+`bookcomments/userid/${userid}`)
+export const getCommentsByUserId = async (username) =>{
+    const response = await axios.get(COMMENTS_API+`usercomments/${username}`)
     return response.data
 }
 
@@ -26,4 +26,9 @@ export const updateComment = async (comment) => {
     const response = await axios
         .put(COMMENTS_API+`updateComment/${comment._id}`, comment);
     return response.data;
+}
+
+export const getReaditBookRating = async (book_id) =>{
+    const response = await axios.get(COMMENTS_API+`bookRating/${book_id}`)
+    return response.data
 }
