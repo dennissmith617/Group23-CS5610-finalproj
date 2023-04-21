@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {findALlCommentsThunk, findCommentsbyUserThunk} from "../../services/comments/comments-thunks";
-import {getCommentsByUserId} from "../../services/comments/comments-service";
+import {findCommentsbyUserThunk} from "../../services/comments/comments-thunks";
 import CommentItem from "../details/comments/commentItem";
 
 
@@ -16,7 +15,10 @@ function LoggedInHomePage() {
 
     const getComments = async () => {
         const action = await dispatch(findCommentsbyUserThunk(currentUser.username));
-        setComments(action.payload.sort((a,b)=> a.timestamps - b.timestamps).reverse().slice(0,5));
+        const arrayToSort = [...action.payload];
+        if(arrayToSort) {
+            setComments(arrayToSort.sort((a,b)=> a.timestamps - b.timestamps).reverse().slice(0,3));
+        }
     };
 
     useEffect(() =>{
@@ -36,7 +38,7 @@ function LoggedInHomePage() {
 
     return(
         <div>
-            <h4>Home</h4>
+            <h1 className="gbook-page-title">Home</h1>
             <img src="/images/books.jpeg" className="w-100" alt="book header"/>
             <h2>Your Recent Reviews</h2>
 
