@@ -67,7 +67,7 @@ const ProfileComponent = (
                 <div className="col-10">
                     <b className="fs-3">Hi {currentUser.firstName}!</b>
                     <div className="fs-6"><b>{currentUser.role}</b></div>
-                    <div className="wd-small-font wd-fg-color-lightgray">{currentUser.booksRead} Books Read {`${(currentUser.role === "CRITIC" || currentUser.role === "AUTHOR") ? `| ${currentUser.comments.length} Reviews Posted` : ''}`} {`${(currentUser.role === "AUTHOR") ? `| ${currentUser.numBooksWritten} Books Written` : ''}`} </div>
+                    <div className="wd-small-font wd-fg-color-lightgray">{currentUser.booksRead.length} Books Read {`${(currentUser.role === "CRITIC" || currentUser.role === "AUTHOR") ? `| ${currentUser.comments.length} Reviews Posted` : ''}`} {`${(currentUser.role === "AUTHOR") ? `| ${currentUser.numBooksWritten} Books Written` : ''}`} </div>
                 </div>
             </div>
             <img src={`/images/books.jpeg`} width="100%" height={150} className="mt-2" />

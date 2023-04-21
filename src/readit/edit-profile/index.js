@@ -12,7 +12,7 @@ const EditProfileComponent = (
 ) => {
     let state = useSelector((state) => state.users);
     let currentUser = state.users.find((u) => u._id === state.currentUser._id);
-    let [prof, setProfile] = useState({...currentUser, "role":currentUser.role, "email":currentUser.email, "age":currentUser.age, "firstName":currentUser.firstName, "lastName": currentUser.lastName, "booksRead": currentUser.booksRead, "username": currentUser.username});
+    let [prof, setProfile] = useState({...currentUser, "role":currentUser.role, "email":currentUser.email, "age":currentUser.age, "firstName":currentUser.firstName, "lastName": currentUser.lastName, "username": currentUser.username});
     const dispatch = useDispatch();
     const profileSaveHandler = () => {
         try {
@@ -40,14 +40,7 @@ const EditProfileComponent = (
                     
                 </div>
             </div>
-            {/* <img src={currentUser.bannerPicture} className="w-100"/> */}
-            {/* <div className="row">
-                <div className="col-8">
-                    <img src={currentUser.profilePicture} className="wd-edit-profile-img rounded-circle"/>
-                </div>
-            </div> */}
             <div className="wd-move-up mb-2">
-                {/* <form className="form-floating"> */}
                 <div>
                     <label className="wd-fg-color-lightgray" htmlFor="floatingInputValue">Type</label><br/>
                     <select onChange={(event) => setProfile({...prof, "role":event.target.value})} defaultValue={currentUser.role}>
@@ -56,7 +49,6 @@ const EditProfileComponent = (
                         <option value="AUTHOR">Author</option>
                     </select>
                 </div>
-                {/* </form> */}
                 <form className="form-floating mt-4">
                     <input type="text" className="form-control" onChange={(event) => setProfile({...prof, "firstName":event.target.value.split(" ")[0], "lastName": event.target.value.split(" ")[1]})} defaultValue={`${currentUser.firstName} ${currentUser.lastName}`} />
                     <label htmlFor="floatingInputValue">Name</label>
@@ -69,10 +61,10 @@ const EditProfileComponent = (
                     <input type="text" className="form-control" onChange={(event) => setProfile({...prof, "username":event.target.value})} defaultValue={currentUser.username}/>
                     <label htmlFor="floatingInputValue">Username</label>
                 </form>
-                <form className="form-floating mt-4">
+                {/* <form className="form-floating mt-4">
                     <input type="number" className="form-control" onChange={(event) => setProfile({...prof, "booksRead":event.target.value})} defaultValue={currentUser.booksRead}/>
                     <label htmlFor="floatingInputValue">Number of Books Read</label>
-                </form>
+                </form> */}
                 <form className="form-floating mt-4">
                     <input type="number" className="form-control" onChange={(event) => setProfile({...prof, "age":event.target.value})} defaultValue={currentUser.age}/>
                     <label htmlFor="floatingInputValue">Age</label>
