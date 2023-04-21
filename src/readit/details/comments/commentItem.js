@@ -16,6 +16,8 @@ import {
 const CommentItem = (props)=> {
     const {comment, canEdit} = props;
     const { currentUser } = useSelector((state) => state.users);
+
+
     let [editing, setEditing] = useState(false);
     const [editReview, setEditReview] = useState();
     const [rating, setRating] = useState(comment.rating);
@@ -34,7 +36,6 @@ const CommentItem = (props)=> {
 
     }
     console.log(editReview)
-// TODO add current user using reducer below.
 
     const deleteButtonHandler = async (commentId) => {
         dispatch(deleteCommentThunk(commentId))
@@ -51,8 +52,8 @@ const CommentItem = (props)=> {
                 <div className="col-10 float-left">
                     <div className="col-12" >
                         <div className="row">
-                            <div className="col-7 float-left"><a href={`/readit/details/${comment.google_id}`}> {comment.bookTitle}</a></div>
-                            {currentUser && currentUser.username === comment.username &&
+                            <div className="col-7 float-left"><Link>{comment.bookTitle}</Link> </div>
+                            {currentUser && currentUser.username === comment.username && canEdit &&
                                 <div className="col-5 ">
                                     <button onClick={() => deleteButtonHandler(comment._id)}
                                             className="btn btn-danger float-end ms-1">Delete

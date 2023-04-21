@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import DOMPurify from "dompurify"
 import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
-import {findCommentsbyBookThunk} from "../../../services/comments/comments-thunks";
+import {findALlCommentsThunk, findCommentsbyBookThunk} from "../../../services/comments/comments-thunks";
 import {
     getBookDescription,
     getBook,
@@ -24,12 +24,8 @@ function Details(
 
     let state = useSelector((state) => state.users);
     let {currentUser} = useSelector((state) => state.users);
-    console.log(currentUser)
-    //TODO Below makes current user undefined.
     // try {
     //     currentUser = state.users.find((u) => u._id === state.currentUser._id);
-    //     console.log("current User below")
-    //     console.log(currentUser)
     // } catch(error) {
     //     console.log(error);
     // }
@@ -57,12 +53,14 @@ function Details(
     const dispatch = useDispatch();
 
     const commentsClickHandler = async () => {
+        console.log(currentUser);
         const newComment = {
             comment : comment,
+            // using params below will update for state once fixed.
             username: currentUser.username,
             userId: currentUser.userId,
             rating: rating,
-            google_id: id,
+            google_id:id,
             bookTitle: bookName
         }
         const {data}  = await axios.post('http://localhost:4000/api/comments',{comment:newComment})
@@ -88,7 +86,7 @@ function Details(
         const responseFloat = parseFloat(response[0].bookRating);
         const readitInt = parseInt(responseFloat);
         setReaditRating(readitInt)
-        
+
     }
 
     const fetchBook = async () =>{
@@ -109,6 +107,7 @@ function Details(
         const fetchBookDescription= async () => {
             const response = await getBookDescription(id);
             const sanitizedHtml = DOMPurify.sanitize(response);
+            console.log(sanitizedHtml)
             setBookDescription(sanitizedHtml)
     }
 

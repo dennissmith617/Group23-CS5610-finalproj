@@ -23,7 +23,6 @@ import GbookDetails from "./gbooks/gbook-details";
 
 
 function Readit() {
-    const { currentUser } = useSelector((state) => state.users);
 
     return (
         <div>
@@ -37,7 +36,7 @@ function Readit() {
                         <Route path="/" element={<HomeComponent/>}/>
                         <Route path="home" element={<HomeComponent/>}/>
                         <Route path="profile/:lid/:vid" element={<ProfilePublicComponent/>}/>
-                        <Route path="/profile/:uid" element={<AnonymousPublicProfile />} />
+                        <Route path="profile/:uid" element={<AnonymousPublicProfile />} />
                         <Route path="profile" element={<ProfileComponent/>}/>
                         <Route path="edit-profile" element={<EditProfileComponent/>}/>
                         <Route path="login" element={<LoginScreen/>}/>
@@ -50,9 +49,6 @@ function Readit() {
                         <Route path="search/:searchterm" element={<GbookSearchScreen/>}></Route>
                         <Route path="details/:id" element={<GbookDetails/>}></Route>
                     </Routes>
-                </div>
-                <div className="d-sm-none d-md-none d-lg-block col-lg-4 col-xl-4">
-                     <WhoToFollowList/>
                 </div>
             </div>
         </div>

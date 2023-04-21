@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import * as userService from "../../services/users/users-service";
-import {Link, useNavigate, useParams} from "react-router-dom";
-import {profileThunk, logoutThunk, findAllUsersThunk} from "../../services/users/users-thunks";
-import { useDispatch, useSelector } from "react-redux";
-import uuid from "uuid";
+import {Link, useParams} from "react-router-dom";
+import {profileThunk, findAllUsersThunk} from "../../services/users/users-thunks";
+import { useDispatch } from "react-redux";
 
 function AnonymousPublicProfile() {
     const { uid } = useParams();
@@ -19,6 +18,7 @@ function AnonymousPublicProfile() {
         const action = await dispatch(findAllUsersThunk());
         setUsers(action.payload);
     };
+
 
     const getUserById = async () => {
         const user = await userService.findUserById(uid);
