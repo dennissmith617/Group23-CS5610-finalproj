@@ -46,7 +46,7 @@ function GbookSearchScreen(){
                            value={search}
                            onChange={(e) =>setSearch(e.target.value)}
                            className="form-control rounded-pill ps-5"/>
-                    <i class="bi bi-book position-absolute wd-nudge-up gbook-search-icon"></i>
+                    <i className="bi bi-book position-absolute wd-nudge-up gbook-search-icon"></i>
                 </div>
 
                 <div className="col-3">

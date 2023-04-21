@@ -16,7 +16,10 @@ function LoggedInHomePage() {
 
     const getComments = async () => {
         const action = await dispatch(findCommentsbyUserThunk(currentUser.username));
-        setComments(action.payload.sort((a,b)=> a.timestamps - b.timestamps).reverse().slice(0,5));
+        const arrayToShot = [...action.payload];
+        if(arrayToShot) {
+            setComments(arrayToShot.sort((a,b)=> a.timestamps - b.timestamps).reverse().slice(0,3));
+        }
     };
 
     useEffect(() =>{
