@@ -103,7 +103,7 @@ const ProfileComponent = (
                                 let curr = users.find((u) => u._id === f);
                                 try {
                                     return (
-                                        <li><Link to={`${currentUser._id}/${f}`}>{(curr.firstName) ? `${curr.firstName} ${curr.lastName}`: ''}</Link></li>
+                                        <li><Link to={`${f}`}>{(curr.firstName) ? `${curr.firstName} ${curr.lastName}`: ''}</Link></li>
                                     )
                                 } catch(error) {
                                     console.log(error);
@@ -121,7 +121,7 @@ const ProfileComponent = (
                             const curr = users.find((u) => u._id === f);
                             try {
                                 return (
-                                    <li><Link to={`${currentUser._id}/${f}`}>{(curr.firstName) ? `${curr.firstName} ${curr.lastName}`: ''}</Link></li>
+                                    <li><Link to={`${f}`}>{(curr.firstName) ? `${curr.firstName} ${curr.lastName}`: ''}</Link></li>
                                 )
                             } catch(error) {
                                 console.log(error);

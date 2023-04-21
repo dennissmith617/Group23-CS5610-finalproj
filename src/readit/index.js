@@ -7,14 +7,12 @@ import ProfileComponent from "./profile";
 import EditProfileComponent from "./edit-profile";
 import SearchComponent from "./search";
 import LoginScreen from "./login";
-import ProfilePublicComponent from "./profile/profile-public";
 import RegisterScreen from "./register";
 import {useSelector} from "react-redux";
 import LogoutScreen from "./logout";
 
 import Details from "./details/comments";
 
-import AnonPublicProfile from "./profile/anon-public-profile";
 import AnonymousPublicProfile from "./profile/anon-public-profile";
 
 import GbookScreen from "./gbooks";
@@ -35,8 +33,7 @@ function Readit() {
                     <Routes>
                         <Route path="/" element={<HomeComponent/>}/>
                         <Route path="home" element={<HomeComponent/>}/>
-                        <Route path="profile/:lid/:vid" element={<ProfilePublicComponent/>}/>
-                        <Route path="profile/:uid" element={<AnonymousPublicProfile />} />
+                        <Route path="/profile/:uid" element={<AnonymousPublicProfile />} />
                         <Route path="profile" element={<ProfileComponent/>}/>
                         <Route path="edit-profile" element={<EditProfileComponent/>}/>
                         <Route path="login" element={<LoginScreen/>}/>
