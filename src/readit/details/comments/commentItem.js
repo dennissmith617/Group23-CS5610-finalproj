@@ -16,8 +16,6 @@ import {
 const CommentItem = (props)=> {
     const {comment, canEdit} = props;
     const { currentUser } = useSelector((state) => state.users);
-
-
     let [editing, setEditing] = useState(false);
     const [editReview, setEditReview] = useState();
     const [rating, setRating] = useState(comment.rating);
@@ -29,11 +27,6 @@ const CommentItem = (props)=> {
     const saveClickHandler = () => {
         setEditing(false)
         dispatch(updateCommentsThunk(editReview));
-        //to implement if update not working
-        // setTimeout(()=>{
-        //     dispatch(findCommentsbyBookThunk(comment.google_id))
-        // }, 300)
-
     }
     console.log(editReview)
 
@@ -47,12 +40,12 @@ const CommentItem = (props)=> {
             <div className="row">
                 <div className="col-2 text-center float-left">
                     <img style={{height:"80px", width:"80px"}} src={avatar} className="col-12 rounded-circle"/>
-                    <div className="overflow-hidden"><a href={`/readit/profile/${comment.userId}`}> {comment.username}</a></div>
+                    <div className="overflow-hidden"><a href={`/readit/profile`}> {comment.username}</a></div>
                 </div>
                 <div className="col-10 float-left">
                     <div className="col-12" >
                         <div className="row">
-                            <div className="col-7 float-left"><Link>{comment.bookTitle}</Link> </div>
+                            <div className="col-7 float-left"><Link to={`/readit/details/${comment.google_id}`}></Link> {comment.bookTitle}</div>
                             {currentUser && currentUser.username === comment.username && canEdit &&
                                 <div className="col-5 ">
                                     <button onClick={() => deleteButtonHandler(comment._id)}

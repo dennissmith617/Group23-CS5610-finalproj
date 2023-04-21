@@ -23,27 +23,31 @@ const ProfileComponent = (
     const dispatch = useDispatch();
     const navigate = useNavigate();
     let {currentUser} = useSelector((state) => state.users);
+    console.log(currentUser)
 
     try {
         currentUser = state.users.find((u) => u._id === state.currentUser._id);
     } catch(error) {
         console.log(error);
     }
-    const fetchCommentsByUserId= async () => {
-        const response = await getCommentsByUserId();
-        console.log(response);
-        setCommentsArray(response.reverse());
-    }
-    const fetchBooksRead= async () => {
-        const response = await getBooksRead();
-        console.log(response);
-        setCommentsArray(response);
-    }
+    // const fetchCommentsByUserId= async () => {
+    //     const response = await getCommentsByUserId(currentUser._id);
+    //     console.log(response);
+    //     setCommentsArray(response.reverse());
+    // }
+    // const fetchBooksRead= async () => {
+    //     const response = await getBooksRead(currentUser._id);
+    //     console.log(response);
+    //     setBooksReadArray(response);
+    // }
     useEffect(() => {
         dispatch(findAllUsersThunk());
         dispatch(profileThunk());
-        //current user currently undefined.
         //TODO fetch comments and booksread
+        // fetchCommentsByUserId();
+        // fetchBooksRead();
+        //current user currently undefined.
+
 
 
     }, []);
@@ -149,7 +153,7 @@ const ProfileComponent = (
             <div className="row">
                 <ul className="list-group">
                     <li className="list-group-item text-lg-center fw-bold" style={{fontSize:20}}> Books Read </li>
-                    {booksReadArray.map(bookRead => <li className={booksReadArray}> <a href={`/readit/details/${bookRead}`}></a></li>)
+                    {booksReadArray.map(bookRead => <li className="list-group-item"> <a href={`/readit/details/${bookRead}`}>{booksReadArray}</a></li>)
                     }
                 </ul>
 
