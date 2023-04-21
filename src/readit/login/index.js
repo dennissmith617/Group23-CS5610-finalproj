@@ -29,6 +29,7 @@ function LoginScreen() {
                     onChange={(e) => {
                         setUsername(e.target.value);
                     }}
+                    placeholder="username"
                 />
             </div>
             <div className="form-group">
@@ -40,6 +41,7 @@ function LoginScreen() {
                     onChange={(e) => {
                         setPassword(e.target.value);
                     }}
+                    placeholder="password"
                 />
             </div>
             <button onClick={login} className="btn btn-primary">
