@@ -158,7 +158,7 @@ function AnonymousPublicProfile() {
                         </ol>}
                     </div>
                     <div className="row">
-                        <div className="col-10">
+                        <div className="col-9">
                             <ul className="list-group">
                                 <li className="list-group-item text-lg-center fw-bold" style={{fontSize:20}}> Reviews </li>
                                 {commentsArray.map(comment => <CommentItem comment = {comment} canEdit={false}/>)
@@ -166,10 +166,10 @@ function AnonymousPublicProfile() {
                             </ul>
 
                         </div>
-                        <div className="col-2">
+                        <div className="col-3">
                             <ul className="list-group">
                                 <li className="list-group-item text-lg-center fw-bold" style={{fontSize:20}}> Books Read </li>
-                                {booksReadArray.map(bookRead => <li className="list-group-item"> <a href={`/readit/details/${bookRead}`}>{bookRead}</a></li>)
+                                {booksReadArray.map(bookRead =>  <a className="list-group-item" href={`/readit/details/${bookRead}`}>{bookRead}</a>)
                                 }
                             </ul>
                         </div>

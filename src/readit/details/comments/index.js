@@ -14,6 +14,7 @@ import {
 } from "../../../services/comments/comments-service";
 import CommentItem from "../comments/commentItem.js";
 import {bookRead, bookReadStatus, bookUnread} from "../../../services/users/users-service";
+import {findAllUsersThunk} from "../../../services/users/users-thunks";
 
 function Details(
     {currentUser1 = { "_id": "6428cfd6dfee68f431eb57d1", "role": "AUTHOR", "username": "test_2", "email": "test@test.com",
@@ -24,11 +25,8 @@ function Details(
 
     let state = useSelector((state) => state.users);
     let {currentUser} = useSelector((state) => state.users);
-    try {
-        currentUser = state.users.find((u) => u._id === state.currentUser._id);
-    } catch(error) {
-        console.log(error);
-    }
+    currentUser = state.users.find((u) => u._id === state.currentUser._id);
+
 
     let bookImageLoading = false;
     const {id} = useParams()
@@ -41,7 +39,7 @@ function Details(
     const [bookDescription, setBookDescription] =useState();
     const [bookPreview, setBookPreview] =useState();
     const [pageCount, setPageCount] = useState();
-    const [previouslyRead, setPreviouslyRead] = useState(false);
+    const [previouslyRead, setPreviouslyRead] = useState();
     const [commentsArray, setCommentsArray] = useState([]);
     const [rating, setRating] = useState(1);
     const [readitRating, setReaditRating] = useState(0);
@@ -79,7 +77,8 @@ function Details(
     }
     const fetchBookReadStatus = async ()=>{
         const response = await bookReadStatus(currentUser._id, id);
-        setPreviouslyRead(response);
+        console.log(response)
+        setPreviouslyRead(response.data);
     }
 
     const fetchReaditBookRating = async () =>{
@@ -89,10 +88,9 @@ function Details(
         setReaditRating(readitInt)
     }
     const fetchCommentStatus = async () =>{
-        if(currentUser.role === "CRITIC" || currentUser.role === "AUTHOR"){
-            setCommentStatus(true)
+        if(currentUser.role==="AUTHOR" || currentUser.role==="CRITIC"){
+            setCommentStatus(true)}
         }
-    }
     const fetchBook = async () =>{
         const response =await getBook(id);
         setBook(response)
@@ -111,19 +109,19 @@ function Details(
         const fetchBookDescription= async () => {
             const response = await getBookDescription(id);
             const sanitizedHtml = DOMPurify.sanitize(response);
-            console.log(sanitizedHtml)
             setBookDescription(sanitizedHtml)
     }
 
     useEffect(() =>{
-
+        dispatch(findAllUsersThunk());
+        fetchBook()
         fetchBookDescription()
+
+
         try {
             fetchReaditBookRating()
         }catch(err) {console.log(err)}
-        fetchCommentStatus()
-        fetchBook()
-        fetchBookReadStatus()
+
 
     },[]);
     useEffect(() =>{
@@ -131,7 +129,10 @@ function Details(
 
     },[]);
 
+    if(previouslyRead===undefined){
+    fetchBookReadStatus()}
 
+    console.log(previouslyRead)
     return (
         <>
         <div>
@@ -319,7 +320,7 @@ function Details(
                             <h2>Ratings & Reviews</h2>
 
                             <div className="row">
-                                {currentUser && commentStatus &&
+                                {currentUser &&
                                       <div className="col-12">
                                     { <textarea value={comment} placeholder="Leave Review"
                                          className="form-control border-1 rounded"
@@ -353,22 +354,6 @@ function Details(
                 </div>
             </div>
         </div>
-            <pre>
-                                    {JSON.stringify(bookName,null,2)}
-                                </pre>
-            <pre>
-                                    {JSON.stringify(bookImage,null,2)}
-                                </pre>
-            <pre>
-                                    {JSON.stringify(bookAuthors,null,2)}
-                                </pre>
-            <pre>
-                                    {JSON.stringify(bookDescription,null,2)}
-                                </pre>
-
-            <pre>
-                                    {JSON.stringify(book,null,2)}
-                                </pre>
             </div>
 
         </>
