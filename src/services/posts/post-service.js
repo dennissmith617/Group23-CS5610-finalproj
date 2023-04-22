@@ -1,5 +1,6 @@
 import axios from "axios";
-const POSTS_API_URL = "http://localhost:4000/api/posts";
+const API_BASE = process.env.REACT_APP_API_BASE;
+const POSTS_API_URL = API_BASE ? API_BASE: "http://localhost:4000/api/posts";
 
 export const createPost = async (post) => {
  const response = await axios.post(POSTS_API_URL, post)
