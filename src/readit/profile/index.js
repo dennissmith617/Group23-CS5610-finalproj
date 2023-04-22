@@ -8,6 +8,7 @@ import { findAllUsersThunk, profileThunk } from "../../services/users/users-thun
 import CommentItem from "../details/comments/commentItem";
 
 import { useNavigate } from "react-router-dom";
+import {findCommentsbyUserThunk} from "../../services/comments/comments-thunks";
 
 const ProfileComponent = (
     {currentUser1 = { "_id": 1, "role": "AUTHOR", "username": "dummy", "email": "test@test.com",
@@ -16,27 +17,26 @@ const ProfileComponent = (
         "followers": [1, 2, 3], "following": [1, 2, 3, 4, 5], "comments": ["c1", "c2"], "booksRead": 6789, "numBooksWritten": 45
     }}
 ) => {
-    let state = useSelector((state) => state.users);
+    let {currentUser} = useSelector((state) => state.users);
+
     const [commentsArray, setCommentsArray] = useState([]);
-    const fetchCommentsByUserId= async (id) => {
-        const response = await getCommentsByUserId(id);
-        console.log(response);
-        setCommentsArray(response.reverse());
-    }
+    const getComments = async () => {
+        const action = await dispatch(findCommentsbyUserThunk(currentUser.username));
+        const arrayToSort = [...action.payload];
+        if(arrayToSort) {
+            setCommentsArray(arrayToSort.sort((a,b)=> a.timestamps - b.timestamps).reverse().slice(0,3));
+        }
+    };
+
+    const getUsers = async () => {
+        await dispatch(findAllUsersThunk());
+    };
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    let {currentUser} = useSelector((state) => state.users);
-    try {
-        currentUser = state.users.find((u) => u._id === state.currentUser._id);
-    } catch(error) {
-        console.log(error);
-    }
 
     useEffect(() => {
-        dispatch(findAllUsersThunk());
-        dispatch(profileThunk());
-        //current user currently undefined.
-        // fetchCommentsByUserId(currentUser._id)
+        getUsers();
+        getComments().then(r => console.log("all comments loaded"));
 
     }, []);
 
@@ -134,7 +134,7 @@ const ProfileComponent = (
 
             <div className="row">
                 <ul className="list-group">
-                    {commentsArray.map(comment => <CommentItem comment = {comment} canEdit={true}/>)}
+                    {currentUser && commentsArray.map(comment => <CommentItem comment = {comment} canEdit={true}/>)}
                 </ul>
             </div>
 
