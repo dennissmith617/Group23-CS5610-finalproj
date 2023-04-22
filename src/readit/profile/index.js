@@ -27,29 +27,23 @@ const ProfileComponent = (
 
     try {
         currentUser = state.users.find((u) => u._id === state.currentUser._id);
-        console.log(currentUser)
     } catch(error) {
         console.log(error);
     }
     const fetchCommentsByUserId= async () => {
-        //TODO below returns null 404 for profile.
-        // currentUser = state.users.find((u) => u._id === state.currentUser._id);
-        const response = await getCommentsByUserId("test_2");
-        console.log(response);
-        setCommentsArray(response.reverse());
+        const response = await getCommentsByUserId(currentUser.username);
+        setCommentsArray(response);
+
     }
     const fetchBooksRead= async () => {
-        // currentUser = state.users.find((u) => u._id === state.currentUser._id);
-        // console.log(currentUser)
-        const response = await getBooksRead("test_2");
+        const response = await getBooksRead(currentUser.username);
         console.log(response)
         setBooksReadArray(response.data)
     }
     useEffect(() => {
         dispatch(findAllUsersThunk());
         dispatch(profileThunk());
-        fetchCommentsByUserId();
-        fetchBooksRead();
+
         //TODO fetch comments and booksread
 
         //current user currently undefined.
@@ -65,6 +59,10 @@ const ProfileComponent = (
     };
 
     const {users} = useSelector((state) => state.users);
+    if(commentsArray.length ===0){
+    fetchCommentsByUserId();}
+    if(booksReadArray.length===0){
+    fetchBooksRead();}
 
     if (!currentUser) {
         return (
