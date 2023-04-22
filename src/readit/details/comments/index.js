@@ -24,11 +24,11 @@ function Details(
 
     let state = useSelector((state) => state.users);
     let {currentUser} = useSelector((state) => state.users);
-    // try {
-    //     currentUser = state.users.find((u) => u._id === state.currentUser._id);
-    // } catch(error) {
-    //     console.log(error);
-    // }
+    try {
+        currentUser = state.users.find((u) => u._id === state.currentUser._id);
+    } catch(error) {
+        console.log(error);
+    }
 
     let bookImageLoading = false;
     const {id} = useParams()
@@ -81,14 +81,18 @@ function Details(
         const response = await bookReadStatus(currentUser._id, id);
         setPreviouslyRead(response);
     }
+
     const fetchReaditBookRating = async () =>{
         const response = await getReaditBookRating(id);
         const responseFloat = parseFloat(response[0].bookRating);
         const readitInt = parseInt(responseFloat);
         setReaditRating(readitInt)
-
     }
-
+    const fetchCommentStatus = async () =>{
+        if(currentUser.role === "CRITIC" || currentUser.role === "AUTHOR"){
+            setCommentStatus(true)
+        }
+    }
     const fetchBook = async () =>{
         const response =await getBook(id);
         setBook(response)
@@ -114,8 +118,11 @@ function Details(
     useEffect(() =>{
 
         fetchBookDescription()
-        fetchReaditBookRating()
+        try {
+            fetchReaditBookRating()
+        }catch(err) {console.log(err)}
 
+        fetchCommentStatus()
         fetchBook()
         fetchBookReadStatus()
 
@@ -313,7 +320,7 @@ function Details(
                             <h2>Ratings & Reviews</h2>
 
                             <div className="row">
-                                {currentUser &&
+                                {currentUser && commentStatus &&
                                       <div className="col-12">
                                     { <textarea value={comment} placeholder="Leave Review"
                                          className="form-control border-1 rounded"

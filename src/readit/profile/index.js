@@ -23,32 +23,36 @@ const ProfileComponent = (
     const dispatch = useDispatch();
     const navigate = useNavigate();
     let {currentUser} = useSelector((state) => state.users);
-    console.log(currentUser)
+
 
     try {
         currentUser = state.users.find((u) => u._id === state.currentUser._id);
+        console.log(currentUser)
     } catch(error) {
         console.log(error);
     }
-    // const fetchCommentsByUserId= async () => {
-    //     const response = await getCommentsByUserId(currentUser._id);
-    //     console.log(response);
-    //     setCommentsArray(response.reverse());
-    // }
-    // const fetchBooksRead= async () => {
-    //     const response = await getBooksRead(currentUser._id);
-    //     console.log(response);
-    //     setBooksReadArray(response);
-    // }
+    const fetchCommentsByUserId= async () => {
+        //TODO below returns null 404 for profile.
+        // currentUser = state.users.find((u) => u._id === state.currentUser._id);
+        const response = await getCommentsByUserId("test_2");
+        console.log(response);
+        setCommentsArray(response.reverse());
+    }
+    const fetchBooksRead= async () => {
+        // currentUser = state.users.find((u) => u._id === state.currentUser._id);
+        // console.log(currentUser)
+        const response = await getBooksRead("test_2");
+        console.log(response)
+        setBooksReadArray(response.data)
+    }
     useEffect(() => {
         dispatch(findAllUsersThunk());
         dispatch(profileThunk());
+        fetchCommentsByUserId();
+        fetchBooksRead();
         //TODO fetch comments and booksread
-        // fetchCommentsByUserId();
-        // fetchBooksRead();
+
         //current user currently undefined.
-
-
 
     }, []);
 
@@ -143,6 +147,7 @@ const ProfileComponent = (
                 </div>
             </div>
             <div className="row">
+            <div className="col-10">
                 <ul className="list-group">
                     <li className="list-group-item text-lg-center fw-bold" style={{fontSize:20}}> Reviews </li>
                     {commentsArray.map(comment => <CommentItem comment = {comment} canEdit={false}/>)
@@ -150,12 +155,13 @@ const ProfileComponent = (
                 </ul>
 
             </div>
-            <div className="row">
+            <div className="col-2">
                 <ul className="list-group">
                     <li className="list-group-item text-lg-center fw-bold" style={{fontSize:20}}> Books Read </li>
-                    {booksReadArray.map(bookRead => <li className="list-group-item"> <a href={`/readit/details/${bookRead}`}>{booksReadArray}</a></li>)
+                    {booksReadArray.map(bookRead => <li className="list-group-item"> <a href={`/readit/details/${bookRead}`}>{bookRead}</a></li>)
                     }
                 </ul>
+            </div>
 
             </div>
             {/*<div className="ms-3 mt-4" hidden={`${(currentUser.role === "VIEWER") ? 'hidden' : ''}`}>
