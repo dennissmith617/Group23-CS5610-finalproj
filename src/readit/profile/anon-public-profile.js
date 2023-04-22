@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 function AnonymousPublicProfile() {
     const { uid } = useParams();
-    const [profile, setProfile] = useState({followers:[]});
+    const [profile, setProfile] = useState({followers:[], booksRead:[]});
     const [users, setUsers] = useState([]);
     const {currentUser} = useSelector((state) => state.users);
     const dispatch = useDispatch();
@@ -78,7 +78,7 @@ function AnonymousPublicProfile() {
                     <div className="col-10">
                         <b className="fs-3">{profile.firstName} {profile.lastName}</b>
                         <div className="fs-6"><b>{profile.role}</b></div>
-                        <div className="wd-small-font wd-fg-color-lightgray">{profile.booksRead} Books Read {`${(profile.role === "CRITIC" || profile.role === "AUTHOR") ? `| ${profile.comments.length} Reviews Posted` : ''}`} {`${(profile.role === "AUTHOR") ? `| ${profile.numBooksWritten} Books Written` : ''}`} </div>
+                        <div className="wd-small-font wd-fg-color-lightgray">{profile.booksRead.length} Books Read {`${(profile.role === "CRITIC" || profile.role === "AUTHOR") ? `| ${profile.comments.length} Reviews Posted` : ''}`} {`${(profile.role === "AUTHOR") ? `| ${profile.numBooksWritten} Books Written` : ''}`} </div>
                     </div>
                 </div>
                 <img src={`/images/books.jpeg`} width="100%" height={150} className="mt-2"/>
@@ -140,7 +140,6 @@ function AnonymousPublicProfile() {
                         </ol>}
                     </div>
                 </div>
-                
             </div>
         );
     }
