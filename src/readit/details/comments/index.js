@@ -47,7 +47,7 @@ function Details(
     const [comment, setComment] =useState("");
     const {comments, loading} = useSelector(
         state => state.commentsData)
-    const [commentStatus, setCommentStatus] =useState(false);
+    const [commentStatus, setCommentStatus] =useState();
     const dispatch = useDispatch();
 
     const commentsClickHandler = async () => {
@@ -131,7 +131,9 @@ function Details(
 
     if(previouslyRead===undefined){
     fetchBookReadStatus()}
-
+    if(commentStatus===undefined){
+        fetchCommentStatus()
+    }
     console.log(previouslyRead)
     return (
         <>
@@ -320,7 +322,7 @@ function Details(
                             <h2>Ratings & Reviews</h2>
 
                             <div className="row">
-                                {currentUser &&
+                                {currentUser && commentStatus &&
                                       <div className="col-12">
                                     { <textarea value={comment} placeholder="Leave Review"
                                          className="form-control border-1 rounded"
