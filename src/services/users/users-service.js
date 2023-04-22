@@ -54,7 +54,9 @@ export const bookReadStatus = (user_id, google_id) => {
 export const getBooksRead = (user_id) =>{
     return axios.get(`${USERS_API_URL}/booksread/${user_id}`)
 }
-
+export const getBooksReadByUid = (uid) =>{
+    return axios.get(`${USERS_API_URL}/anon/booksread/${uid}`)
+}
 export const findUserByUsername = async (username) => {
     const response = await api.get(`${USERS_API_URL}/username/${username}`);
     return response.data;

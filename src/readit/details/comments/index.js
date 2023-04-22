@@ -121,7 +121,6 @@ function Details(
         try {
             fetchReaditBookRating()
         }catch(err) {console.log(err)}
-
         fetchCommentStatus()
         fetchBook()
         fetchBookReadStatus()

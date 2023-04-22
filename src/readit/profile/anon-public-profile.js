@@ -3,11 +3,16 @@ import * as userService from "../../services/users/users-service";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {profileThunk, updateUserThunk, findAllUsersThunk} from "../../services/users/users-thunks";
 import { useDispatch, useSelector } from "react-redux";
+import {getCommentsByUid, getCommentsByUserId} from "../../services/comments/comments-service";
+import {getBooksRead, getBooksReadByUid} from "../../services/users/users-service";
+import CommentItem from "../details/comments/commentItem";
 
 function AnonymousPublicProfile() {
     const { uid } = useParams();
     const [profile, setProfile] = useState({followers:[], booksRead:[]});
     const [users, setUsers] = useState([]);
+    const [commentsArray, setCommentsArray]= useState([]);
+    const [booksReadArray, setBooksReadArray] = useState([])
     const {currentUser} = useSelector((state) => state.users);
     const dispatch = useDispatch();
     const getProfile = async () => {
@@ -19,7 +24,17 @@ function AnonymousPublicProfile() {
         const action = await dispatch(findAllUsersThunk());
         setUsers(action.payload);
     };
+    const fetchCommentsByUserId= async () => {
+        const response = await getCommentsByUid(uid);
+        console.log(response)
+        setCommentsArray(response);
 
+    }
+    const fetchBooksRead= async () => {
+        const response = await getBooksReadByUid(uid);
+        console.log(response)
+        setBooksReadArray(response.data)
+    }
 
     const getUserById = async () => {
         const user = await userService.findUserById(uid);
@@ -30,6 +45,8 @@ function AnonymousPublicProfile() {
         if (uid) {
             getAllUsers().then(r => console.log("all users loaded"));
             getUserById().then(r => console.log("user loaded"));
+            fetchCommentsByUserId()
+            fetchBooksRead()
         } else {
             getProfile();
         }
@@ -61,6 +78,7 @@ function AnonymousPublicProfile() {
         dispatch(updateUserThunk(newProfileUser));
         getAllUsers();
         setProfile(newProfileUser);
+
     }
 
     const navigate = useNavigate();
@@ -138,6 +156,24 @@ function AnonymousPublicProfile() {
                                 }
                             )}
                         </ol>}
+                    </div>
+                    <div className="row">
+                        <div className="col-10">
+                            <ul className="list-group">
+                                <li className="list-group-item text-lg-center fw-bold" style={{fontSize:20}}> Reviews </li>
+                                {commentsArray.map(comment => <CommentItem comment = {comment} canEdit={false}/>)
+                                }
+                            </ul>
+
+                        </div>
+                        <div className="col-2">
+                            <ul className="list-group">
+                                <li className="list-group-item text-lg-center fw-bold" style={{fontSize:20}}> Books Read </li>
+                                {booksReadArray.map(bookRead => <li className="list-group-item"> <a href={`/readit/details/${bookRead}`}>{bookRead}</a></li>)
+                                }
+                            </ul>
+                        </div>
+
                     </div>
                 </div>
             </div>

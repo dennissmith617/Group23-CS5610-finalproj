@@ -19,11 +19,13 @@ export const getCommentsByBookId = async (google_id) =>{
     return response.data
 }
 export const getCommentsByUserId = async (userid) =>{
-    console.log(userid)
     const response = await axios.get(COMMENTS_API+`usercomments/${userid}`)
     return response.data
 }
-
+export const getCommentsByUid = async (userid) =>{
+    const response = await axios.get(COMMENTS_API+`anon/usercomments/${userid}`)
+    return response.data
+}
 export const deleteReview = async (comment_id) =>{
     const response = await axios.delete(COMMENTS_API+`bookcomments/${comment_id}`)
     return response.data
