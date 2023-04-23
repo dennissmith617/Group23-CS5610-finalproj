@@ -42,14 +42,22 @@ export const profile = () => {
     return api.get(`${USERS_API_URL}/profile`);
 };
 
-export const increaseBooksRead = (id) => {
-    return axios.put(`${USERS_API_URL}/increaseBooksRead/${id}`);
+export const bookRead = (user_id,google_id, bookTitle) => {
+    return axios.put(`${USERS_API_URL}/bookread/${user_id}/${google_id}/${bookTitle}`);
 };
-export const decreaseBooksRead = (id) => {
-    return axios.put(`${USERS_API_URL}/decreaseBooksRead/${id}`);
+export const bookUnread = (user_id, google_id, bookTitle) => {
+    return axios.put(`${USERS_API_URL}/bookunread/${user_id}/${google_id}/${bookTitle}`);
 }
 
-
+export const bookReadStatus = (user_id, google_id) => {
+    return axios.get(`${USERS_API_URL}/bookreadstatus/${user_id}/${google_id}`)
+}
+export const getBooksRead = (user_id) =>{
+    return axios.get(`${USERS_API_URL}/booksread/${user_id}`)
+}
+export const getBooksReadByUid = (uid) =>{
+    return axios.get(`${USERS_API_URL}/anon/booksread/${uid}`)
+}
 export const findUserByUsername = async (username) => {
     const response = await api.get(`${USERS_API_URL}/username/${username}`);
     return response.data;

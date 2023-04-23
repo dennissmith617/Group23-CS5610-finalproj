@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {findALlCommentsThunk} from "../../services/comments/comments-thunks";
 import {useDispatch} from "react-redux";
+import {getBook} from "../gbooks/gbook-service";
+import avatar from "../details/comments/images/avatar_img.png";
+import {Link} from "react-router-dom";
 import CommentItem from "../details/comments/commentItem";
 
 function AnonymousHomePage() {

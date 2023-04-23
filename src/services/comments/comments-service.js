@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import {findCommentsbyBookThunk} from "./comments-thunks";
 const API_BASE = process.env.REACT_APP_API_BASE;
 const COMMENTS_API = API_BASE ? API_BASE: 'http://localhost:4000/api/comments/';
 
@@ -21,7 +22,10 @@ export const getCommentsByUserId = async (userid) =>{
     const response = await axios.get(COMMENTS_API+`usercomments/${userid}`)
     return response.data
 }
-
+export const getCommentsByUid = async (userid) =>{
+    const response = await axios.get(COMMENTS_API+`anon/usercomments/${userid}`)
+    return response.data
+}
 export const deleteReview = async (comment_id) =>{
     const response = await axios.delete(COMMENTS_API+`bookcomments/${comment_id}`)
     return response.data
@@ -31,4 +35,9 @@ export const updateComment = async (comment) => {
     const response = await axios
         .put(COMMENTS_API+`updateComment/${comment._id}`, comment);
     return response.data;
+}
+
+export const getReaditBookRating = async (book_id) =>{
+    const response = await axios.get(COMMENTS_API+`bookRating/${book_id}`)
+    return response.data
 }

@@ -5,19 +5,16 @@ import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
 import {findALlCommentsThunk, findCommentsbyBookThunk} from "../../../services/comments/comments-thunks";
 import {
-    getBookTitle,
-    getBookImage,
-    getAuthorNames,
     getBookDescription,
-    getBookReleaseDate,
     getBook,
-    getBookPreview,
-    getGoogleRating,
-    getPageCount,
-    getISBN
 } from "../service/details-service";
-import {getCommentsByBookId, getCommentsByUserId} from "../../../services/comments/comments-service";
+import {
+
+    getReaditBookRating
+} from "../../../services/comments/comments-service";
 import CommentItem from "../comments/commentItem.js";
+import {bookRead, bookReadStatus, bookUnread} from "../../../services/users/users-service";
+import {findAllUsersThunk} from "../../../services/users/users-thunks";
 
 function Details(
     {currentUser1 = { "_id": "6428cfd6dfee68f431eb57d1", "role": "AUTHOR", "username": "test_2", "email": "test@test.com",
@@ -28,11 +25,8 @@ function Details(
 
     let state = useSelector((state) => state.users);
     let {currentUser} = useSelector((state) => state.users);
-    try {
-        currentUser = state.users.find((u) => u._id === state.currentUser._id);
-    } catch(error) {
-        console.log(error);
-    }
+    currentUser = state.users.find((u) => u._id === state.currentUser._id);
+
 
     let bookImageLoading = false;
     const {id} = useParams()
@@ -45,12 +39,15 @@ function Details(
     const [bookDescription, setBookDescription] =useState();
     const [bookPreview, setBookPreview] =useState();
     const [pageCount, setPageCount] = useState();
+    const [previouslyRead, setPreviouslyRead] = useState();
     const [commentsArray, setCommentsArray] = useState([]);
     const [rating, setRating] = useState(1);
+    const [readitRating, setReaditRating] = useState(0);
     const [ISBN, setISBN] = useState();
     const [comment, setComment] =useState("");
     const {comments, loading} = useSelector(
         state => state.commentsData)
+    const [commentStatus, setCommentStatus] =useState();
     const dispatch = useDispatch();
 
     const commentsClickHandler = async () => {
@@ -66,39 +63,36 @@ function Details(
         }
         const {data}  = await axios.post('http://localhost:4000/api/comments',{comment:newComment})
         console.log(data)
-        dispatch(findCommentsbyBookThunk("sFX0AwAAQBAJ"));
+        dispatch(findCommentsbyBookThunk(id));
         setComment("")
 
     };
-    const readClickHandler = async (user_id) => {
-        await axios.put(`http://localhost:4000/api/users/increaseBooksRead/${user_id}`)
-        console.log(user_id);
+    const readClickHandler = async () => {
+        bookRead(currentUser._id,id,bookName);
+        setPreviouslyRead(true)
     }
-    const unreadClickHandler = async (user_id) => {
-        await axios.put(`http://localhost:4000/api/users/decreaseBooksRead/${user_id}`)
-        console.log(user_id);
+    const unreadClickHandler = async () => {
+        bookUnread(currentUser._id,id,bookName);
+        setPreviouslyRead(false)
+    }
+    const fetchBookReadStatus = async ()=>{
+        const response = await bookReadStatus(currentUser._id, id);
+        console.log(currentUser._id)
+        console.log(id)
+        console.log(response)
+        setPreviouslyRead(response.data);
     }
 
-    const fetchCommentsByBookId= async (id) => {
-        const response = await getCommentsByBookId(id);
-        console.log(response);
-        setCommentsArray(response.reverse());
+    const fetchReaditBookRating = async () =>{
+        const response = await getReaditBookRating(id);
+        const responseFloat = parseFloat(response[0].bookRating);
+        const readitInt = parseInt(responseFloat);
+        setReaditRating(readitInt)
     }
-
-    // const fetchBookName = async () =>{
-    //     const response =await getBookTitle(id);
-    //     setBookName(response)
-    //
-    // };
-    // const fetchGoogleRating = async () =>{
-    //     const response =await getGoogleRating(id);
-    //     const ratingInt = parseFloat(response);
-    //     setGoogleRating(ratingInt)
-    // };
-    // const fetchBookPreview = async () =>{
-    //     const response =await getBookPreview(id);
-    //     setBookPreview(response)
-    // };
+    const fetchCommentStatus = async () =>{
+        if(currentUser.role==="AUTHOR" || currentUser.role==="CRITIC"){
+            setCommentStatus(true)}
+        }
     const fetchBook = async () =>{
         const response =await getBook(id);
         setBook(response)
@@ -113,52 +107,36 @@ function Details(
 
 
     };
-    // const fetchBookImage = async () =>{
-    //     const response =await getBookImage(id);
-    //     bookImageLoading = true;
-    //   //  setBookImage(response)
-    // };
-    // const fetchBookAuthors = async () => {
-    //     const response = await getAuthorNames(id);
-    //     setBookAuthors(response)
-    // }
+
         const fetchBookDescription= async () => {
             const response = await getBookDescription(id);
             const sanitizedHtml = DOMPurify.sanitize(response);
-            console.log(sanitizedHtml)
             setBookDescription(sanitizedHtml)
     }
-    // const fetchBookReleaseDate= async () => {
-    //     const response = await getBookReleaseDate(id);
-    //     setBookReleaseDate(response)
-    // }
-    // const fetchPageCount= async () => {
-    //     const response = await getPageCount(id);
-    //     setPageCount(response)
-    // }
-    // const fetchISBN= async () => {
-    //     const response = await getISBN(id);
-    //     setISBN(response[1].identifier)
-    // }
+
     useEffect(() =>{
-       //  fetchBookName();
-       // fetchBookImage()
-       // fetchBookAuthors()
-        fetchBookDescription()
-        //fetchBookReleaseDate()
+        dispatch(findAllUsersThunk());
         fetchBook()
-        // fetchBookPreview()
-       // fetchGoogleRating()
-       //  fetchPageCount()
-       //  fetchISBN()
-        // fetchCommentsByBookId(id)
+        fetchBookDescription()
+
+
+        try {
+            fetchReaditBookRating()
+        }catch(err) {console.log(err)}
+
+
     },[]);
     useEffect(() =>{
         dispatch(findCommentsbyBookThunk(id));
 
-
     },[]);
 
+    if(previouslyRead===undefined){
+    fetchBookReadStatus()}
+    if(commentStatus===undefined){
+        fetchCommentStatus()
+    }
+    console.log(previouslyRead)
     return (
         <>
         <div>
@@ -173,7 +151,7 @@ function Details(
                             <div className="card-body">
                                 <h5 className="card-title"> </h5>
                                 <h6 className="text-sm-center text-decoration-underline">Authored By:</h6>
-                                <p className="card-text">{bookAuthors.map((author) => (
+                                <p className="card-text">{bookAuthors?.map((author) => (
                                     <h6 className="text-sm-center">{author}</h6>))} </p>
                                 <hr/>
                                 <div>
@@ -223,6 +201,7 @@ function Details(
                                         <i className=" text-warning bi bi-star-fill"></i>
                                         <i className="text-warning bi bi-star-fill"></i>
                                         <i className="text-warning bi bi-star"></i>
+                                        <span className="fw-semibold"><br/><i className="bi bi-google"></i> Rating: ({googleRating})</span>
                                     </div>}
                                 {googleRating===5 &&
                                     <div className="text-sm-center">
@@ -233,6 +212,58 @@ function Details(
                                         <i className="text-warning bi bi-star-fill"></i>
                                         <span className="fw-semibold"><br/><i className="bi bi-google"></i> Rating: ({googleRating})</span>
                                     </div>}
+                                {readitRating<1 &&
+                                    <div className="text-sm-center">
+                                        <i className="text-warning bi bi-star"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                        <i className=" text-warning bi bi-star"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                        <span className="fw-semibold"><br/>Readit Rating: ({readitRating})</span>
+                                    </div>}
+                                {readitRating<2 && readitRating>=1&&
+                                    <div className="text-sm-center">
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                        <i className=" text-warning bi bi-star"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                        <span className="fw-semibold"><br/>Readit Rating: ({readitRating})</span>
+                                    </div>}
+                                {readitRating<3 && readitRating>=2&&
+                                    <div className="text-sm-center">
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className=" text-warning bi bi-star"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                        <span className="fw-semibold"><br/>Readit Rating: ({readitRating})</span>
+                                    </div>}
+                                {readitRating<4 && readitRating>=3&&
+                                    <div className="text-sm-center">
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className=" text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                        <span className="fw-semibold"><br/>Readit Rating: ({readitRating})</span>
+                                    </div>}
+                                {readitRating<5 && readitRating>=4&&
+                                    <div className="text-sm-center">
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className=" text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star"></i>
+                                        <span className="fw-semibold"><br/>Readit Rating: ({readitRating})</span></div>}
+                                {readitRating===5 &&
+                                    <div className="text-sm-center">
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className=" text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <i className="text-warning bi bi-star-fill"></i>
+                                        <span className="fw-semibold"><br/>Readit Rating: ({readitRating})</span></div>}
                                 <div className="text-sm-center">
 
                                     {bookPreview?<a target="_blank" href={bookPreview}><button className="btn btn-primary">Google Books</button></a>:
@@ -244,12 +275,14 @@ function Details(
                                 </div>
 
                                     <div className="text-sm-center">
+                                        {!previouslyRead&&
+                                        <button onClick={()=> readClickHandler()} className="btn btn-success mt-1">Read</button>}
 
-                                        <button onClick={()=> readClickHandler(currentUser1._id)} className="btn btn-success mt-1">Read</button>
                                     </div>
                                         <div className="text-sm-center">
-                                            <button onClick={()=> unreadClickHandler(currentUser1._id)} className="btn btn-danger mt-1">Unread</button>
-
+                                            {previouslyRead &&
+                                                <button onClick={() => unreadClickHandler()}
+                                                        className="btn btn-danger mt-1">Unread</button>}
                                     </div>
                             </div>
                     </div>
@@ -289,10 +322,11 @@ function Details(
                             <hr/>
 
                             <h2>Ratings & Reviews</h2>
+
                             <div className="row">
-                                {currentUser &&
-                                <div className="col-12">
-                                    {  <textarea value={comment} placeholder="Leave Review"
+                                {currentUser && commentStatus &&
+                                      <div className="col-12">
+                                    { <textarea value={comment} placeholder="Leave Review"
                                          className="form-control border-1 rounded"
                                          onChange={(event) => setComment(event.target.value)}>
                                </textarea>}
@@ -311,12 +345,10 @@ function Details(
                                         </select>
                                     </div>
                                     <hr/>
-                                </div>
-                                }
+                                </div>}
                                 <div className="row">
                                     <ul className="list-group">
-
-                                        {comments.map(comment => <CommentItem comment = {comment} canEdit={true}/>)}
+                                        {comments?.map(comment => <CommentItem comment = {comment} canEdit={true}/>)}
                                     </ul>
 
                                 </div>
@@ -326,22 +358,6 @@ function Details(
                 </div>
             </div>
         </div>
-            <pre>
-                                    {JSON.stringify(bookName,null,2)}
-                                </pre>
-            <pre>
-                                    {JSON.stringify(bookImage,null,2)}
-                                </pre>
-            <pre>
-                                    {JSON.stringify(bookAuthors,null,2)}
-                                </pre>
-            <pre>
-                                    {JSON.stringify(bookDescription,null,2)}
-                                </pre>
-
-            <pre>
-                                    {JSON.stringify(book,null,2)}
-                                </pre>
             </div>
 
         </>

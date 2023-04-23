@@ -8,6 +8,7 @@ import { findAllUsersThunk, profileThunk } from "../../services/users/users-thun
 import CommentItem from "../details/comments/commentItem";
 
 import { useNavigate } from "react-router-dom";
+import {getBooksRead} from "../../services/users/users-service";
 
 const ProfileComponent = (
     {currentUser1 = { "_id": 1, "role": "AUTHOR", "username": "dummy", "email": "test@test.com",
@@ -18,25 +19,34 @@ const ProfileComponent = (
 ) => {
     let state = useSelector((state) => state.users);
     const [commentsArray, setCommentsArray] = useState([]);
-    const fetchCommentsByUserId= async (id) => {
-        const response = await getCommentsByUserId(id);
-        console.log(response);
-        setCommentsArray(response.reverse());
-    }
+    const [booksReadArray, setBooksReadArray] =useState([]);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     let {currentUser} = useSelector((state) => state.users);
+
+
     try {
         currentUser = state.users.find((u) => u._id === state.currentUser._id);
     } catch(error) {
         console.log(error);
     }
+    const fetchCommentsByUserId= async () => {
+        const response = await getCommentsByUserId(currentUser.username);
+        setCommentsArray(response);
 
+    }
+    const fetchBooksRead= async () => {
+        const response = await getBooksRead(currentUser.username);
+        console.log(response)
+        setBooksReadArray(response.data)
+    }
     useEffect(() => {
         dispatch(findAllUsersThunk());
         dispatch(profileThunk());
+
+        //TODO fetch comments and booksread
+
         //current user currently undefined.
-        // fetchCommentsByUserId(currentUser._id)
 
     }, []);
 
@@ -49,6 +59,10 @@ const ProfileComponent = (
     };
 
     const {users} = useSelector((state) => state.users);
+    if(commentsArray.length ===0){
+        fetchCommentsByUserId();}
+    if(booksReadArray.length===0){
+        fetchBooksRead();}
 
     if (!currentUser) {
         return (
@@ -130,15 +144,24 @@ const ProfileComponent = (
                     </ol>
                 </div>
             </div>
-
-
             <div className="row">
+            <div className="col-10">
                 <ul className="list-group">
-                    {commentsArray.map(comment => <CommentItem comment = {comment} canEdit={true}/>)}
+                    <li className="list-group-item text-lg-center fw-bold" style={{fontSize:20}}> Reviews </li>
+                    {commentsArray.map(comment => <CommentItem comment = {comment} canEdit={false}/>)
+                    }
+                </ul>
+
+            </div>
+            <div className="col-2">
+                <ul className="list-group">
+                    <li className="list-group-item text-lg-center fw-bold" style={{fontSize:20}}> Books Read </li>
+                    {booksReadArray.map(bookRead => <li className="list-group-item"> <a href={`/readit/details/${bookRead.bookId}`}>{bookRead.bookTitle}</a></li>)
+                    }
                 </ul>
             </div>
 
-
+            </div>
             {/*<div className="ms-3 mt-4" hidden={`${(currentUser.role === "VIEWER") ? 'hidden' : ''}`}>
                 <h5>Reviews Posted:</h5>
                 <ul>
