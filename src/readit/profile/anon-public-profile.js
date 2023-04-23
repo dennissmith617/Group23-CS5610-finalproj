@@ -33,7 +33,7 @@ function AnonymousPublicProfile() {
     const fetchBooksRead= async () => {
         const response = await getBooksReadByUid(uid);
         console.log(response.data)
-        setBooksReadArray(response.data)
+        setBooksReadArray([...response.data])
     }
 
     const getUserById = async () => {
@@ -161,7 +161,7 @@ function AnonymousPublicProfile() {
                         <div className="col-9">
                             <ul className="list-group">
                                 <li className="list-group-item text-lg-center fw-bold" style={{fontSize:20}}> Reviews </li>
-                                {commentsArray.map(comment => <CommentItem comment = {comment} canEdit={false}/>)
+                                {commentsArray?.map(comment => <CommentItem comment = {comment} canEdit={false}/>)
                                 }
                             </ul>
 
@@ -169,7 +169,7 @@ function AnonymousPublicProfile() {
                         <div className="col-3">
                             <ul className="list-group">
                                 <li className="list-group-item text-lg-center fw-bold" style={{fontSize:20}}> Books Read </li>
-                                {booksReadArray.map(bookRead =>  <a className="list-group-item" href={`/readit/details/${bookRead}`}>{bookRead}</a>)
+                                {booksReadArray?.map(bookRead =>  <a className="list-group-item" href={`/readit/details/${bookRead.bookId}`}>{bookRead.bookTitle}</a>)
                                 }
                             </ul>
                         </div>
