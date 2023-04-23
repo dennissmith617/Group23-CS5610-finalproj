@@ -32,7 +32,7 @@ function AnonymousPublicProfile() {
     }
     const fetchBooksRead= async () => {
         const response = await getBooksReadByUid(uid);
-        console.log(response)
+        console.log(response.data)
         setBooksReadArray(response.data)
     }
 

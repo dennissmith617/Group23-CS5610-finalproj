@@ -60,9 +60,9 @@ const ProfileComponent = (
 
     const {users} = useSelector((state) => state.users);
     if(commentsArray.length ===0){
-    fetchCommentsByUserId();}
+        fetchCommentsByUserId();}
     if(booksReadArray.length===0){
-    fetchBooksRead();}
+        fetchBooksRead();}
 
     if (!currentUser) {
         return (

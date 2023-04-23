@@ -77,6 +77,8 @@ function Details(
     }
     const fetchBookReadStatus = async ()=>{
         const response = await bookReadStatus(currentUser._id, id);
+        console.log(currentUser._id)
+        console.log(id)
         console.log(response)
         setPreviouslyRead(response.data);
     }
@@ -149,7 +151,7 @@ function Details(
                             <div className="card-body">
                                 <h5 className="card-title"> </h5>
                                 <h6 className="text-sm-center text-decoration-underline">Authored By:</h6>
-                                <p className="card-text">{bookAuthors.map((author) => (
+                                <p className="card-text">{bookAuthors?.map((author) => (
                                     <h6 className="text-sm-center">{author}</h6>))} </p>
                                 <hr/>
                                 <div>
@@ -346,7 +348,7 @@ function Details(
                                 </div>}
                                 <div className="row">
                                     <ul className="list-group">
-                                        {comments.map(comment => <CommentItem comment = {comment} canEdit={true}/>)}
+                                        {comments?.map(comment => <CommentItem comment = {comment} canEdit={true}/>)}
                                     </ul>
 
                                 </div>
