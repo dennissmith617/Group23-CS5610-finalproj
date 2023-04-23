@@ -156,7 +156,7 @@ const ProfileComponent = (
             <div className="col-2">
                 <ul className="list-group">
                     <li className="list-group-item text-lg-center fw-bold" style={{fontSize:20}}> Books Read </li>
-                    {booksReadArray.map(bookRead => <li className="list-group-item"> <a href={`/readit/details/${bookRead}`}>{bookRead}</a></li>)
+                    {booksReadArray.map(bookRead => <li className="list-group-item"> <a href={`/readit/details/${bookRead.bookId}`}>{bookRead.bookTitle}</a></li>)
                     }
                 </ul>
             </div>

@@ -68,11 +68,11 @@ function Details(
 
     };
     const readClickHandler = async () => {
-        bookRead(currentUser._id,id);
+        bookRead(currentUser._id,id,bookName);
         setPreviouslyRead(true)
     }
     const unreadClickHandler = async () => {
-        bookUnread(currentUser._id,id);
+        bookUnread(currentUser._id,id,bookName);
         setPreviouslyRead(false)
     }
     const fetchBookReadStatus = async ()=>{

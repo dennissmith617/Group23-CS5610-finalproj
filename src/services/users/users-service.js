@@ -41,11 +41,11 @@ export const profile = () => {
     return api.get(`${USERS_API_URL}/profile`);
 };
 
-export const bookRead = (user_id,google_id) => {
-    return axios.put(`${USERS_API_URL}/bookread/${user_id}/${google_id}`);
+export const bookRead = (user_id,google_id, bookTitle) => {
+    return axios.put(`${USERS_API_URL}/bookread/${user_id}/${google_id}/${bookTitle}`);
 };
-export const bookUnread = (user_id, google_id) => {
-    return axios.put(`${USERS_API_URL}/bookunread/${user_id}/${google_id}`);
+export const bookUnread = (user_id, google_id, bookTitle) => {
+    return axios.put(`${USERS_API_URL}/bookunread/${user_id}/${google_id}/${bookTitle}`);
 }
 
 export const bookReadStatus = (user_id, google_id) => {
