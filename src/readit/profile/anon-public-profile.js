@@ -86,6 +86,10 @@ function AnonymousPublicProfile() {
         navigate('/readit/register');
     }
 
+    if (currentUser?._id === uid) {
+        navigate('/readit/profile')
+    }
+
     if (profile) {
         return (
             <div>
@@ -96,7 +100,7 @@ function AnonymousPublicProfile() {
                     <div className="col-10">
                         <b className="fs-3">{profile.firstName} {profile.lastName}</b>
                         <div className="fs-6"><b>{profile.role}</b></div>
-                        <div className="wd-small-font wd-fg-color-lightgray">{profile.booksRead.length} Books Read {`${(profile.role === "CRITIC" || profile.role === "AUTHOR") ? `| ${profile.comments.length} Reviews Posted` : ''}`} {`${(profile.role === "AUTHOR") ? `| ${profile.numBooksWritten} Books Written` : ''}`} </div>
+                        <div className="wd-small-font wd-fg-color-lightgray">{profile.booksRead.length} Books Read {`${(profile.role === "CRITIC" || profile.role === "AUTHOR") ? `| ${commentsArray.length} Reviews Posted` : ''}`} {`${(profile.role === "AUTHOR") ? `| ${profile.numBooksWritten} Books Written` : ''}`} </div>
                     </div>
                 </div>
                 <img src={`/images/books.jpeg`} width="100%" height={150} className="mt-2"/>
