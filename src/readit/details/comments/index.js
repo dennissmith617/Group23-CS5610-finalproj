@@ -25,7 +25,9 @@ function Details(
 
     let state = useSelector((state) => state.users);
     let {currentUser} = useSelector((state) => state.users);
-    currentUser = state.users.find((u) => u._id === state.currentUser._id);
+    if (currentUser) {
+        currentUser = state.users.find((u) => u._id === state.currentUser._id);
+    }
 
 
     let bookImageLoading = false;
