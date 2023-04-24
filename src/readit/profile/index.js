@@ -42,7 +42,7 @@ const ProfileComponent = (
     }
     useEffect(() => {
         dispatch(findAllUsersThunk());
-        dispatch(profileThunk());
+        // dispatch(profileThunk());
 
         //TODO fetch comments and booksread
 
@@ -59,10 +59,7 @@ const ProfileComponent = (
     };
 
     const {users} = useSelector((state) => state.users);
-    if(commentsArray.length ===0){
-        fetchCommentsByUserId();}
-    if(booksReadArray.length===0){
-        fetchBooksRead();}
+    
 
     if (!currentUser) {
         return (
@@ -70,6 +67,11 @@ const ProfileComponent = (
                 Sign up for an Account Here!
             </button>
         );
+    } else {
+        if(commentsArray.length ===0){
+            fetchCommentsByUserId();}
+        if(booksReadArray.length===0){
+            fetchBooksRead();}
     }
 
     return(
@@ -81,7 +83,7 @@ const ProfileComponent = (
                 <div className="col-10">
                     <b className="fs-3">Hi {currentUser.firstName}!</b>
                     <div className="fs-6"><b>{currentUser.role}</b></div>
-                    <div className="wd-small-font wd-fg-color-lightgray">{currentUser.booksRead.length} Books Read {`${(currentUser.role === "CRITIC" || currentUser.role === "AUTHOR") ? `| ${currentUser.comments.length} Reviews Posted` : ''}`} {`${(currentUser.role === "AUTHOR") ? `| ${currentUser.numBooksWritten} Books Written` : ''}`} </div>
+                    <div className="wd-small-font wd-fg-color-lightgray">{currentUser.booksRead.length} Books Read {`${(currentUser.role === "CRITIC" || currentUser.role === "AUTHOR") ? `| ${commentsArray.length} Reviews Posted` : ''}`} {`${(currentUser.role === "AUTHOR") ? `| ${currentUser.numBooksWritten} Books Written` : ''}`} </div>
                 </div>
             </div>
             <img src={`/images/books.jpeg`} width="100%" height={150} className="mt-2" />

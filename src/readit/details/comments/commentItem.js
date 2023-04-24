@@ -40,12 +40,12 @@ const CommentItem = (props)=> {
             <div className="row">
                 <div className="col-2 text-center float-left">
                     <img style={{height:"80px", width:"80px"}} src={avatar} className="col-12 rounded-circle"/>
-                    <div className="overflow-hidden"><a href={`/readit/profile/${comment.userId}`}> {comment.username}</a></div>
+                    <div className="overflow-hidden"><Link to={`/readit/profile/${comment.userId}`}> {comment.username}</Link></div>
                 </div>
                 <div className="col-10 float-left">
                     <div className="col-12" >
                         <div className="row">
-                            <div className="col-7 float-left"><a href={`/readit/details/${comment.google_id}`}>{comment.bookTitle}</a>  </div>
+                            <div className="col-7 float-left"><Link to={`/readit/details/${comment.google_id}`}>{comment.bookTitle}</Link> </div>
                             {currentUser && currentUser.username === comment.username && canEdit &&
                                 <div className="col-5 ">
                                     <button onClick={() => deleteButtonHandler(comment._id)}
@@ -106,7 +106,7 @@ const CommentItem = (props)=> {
                                 <i className="text-warning bi bi-star"></i>
                             </div>}
                         {comment.rating===5 &&
-                            <div className className="float-left col-6">
+                            <div className="float-left col-6">
                                 <i className="text-warning bi bi-star-fill"></i>
                                 <i className="text-warning bi bi-star-fill"></i>
                                 <i className=" text-warning bi bi-star-fill"></i>
