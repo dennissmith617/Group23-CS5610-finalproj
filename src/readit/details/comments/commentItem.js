@@ -45,7 +45,7 @@ const CommentItem = (props)=> {
                 <div className="col-10 float-left">
                     <div className="col-12" >
                         <div className="row">
-                            <div className="col-7 float-left"><Link to={`/readit/details/${comment.google_id}`}>{comment.bookTitle}</Link> </div>
+                        <div className="col-7 float-left"><Link to={(currentUser) ? `/readit/details/${comment.google_id }` : ""}>{comment.bookTitle}</Link> </div>
                             {currentUser && currentUser.username === comment.username && canEdit &&
                                 <div className="col-5 ">
                                     <button onClick={() => deleteButtonHandler(comment._id)}
